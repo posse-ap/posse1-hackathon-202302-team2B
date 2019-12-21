@@ -8,13 +8,13 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./www:/var/www:cached
+      - ../ichiichiban:/var/www/laravel:cached
 
   php:
     build:
       context: ./phpfpm
     volumes:
-      - ./www:/var/www:cached
+      - ../ichiichiban:/var/www/laravel:cached
 
   mysql:
     #restart: always
