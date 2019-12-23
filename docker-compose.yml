@@ -24,6 +24,6 @@ services:
       - ./mysql/data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=test
+      - MYSQL_DATABASE=ichiichiban
     ports:
       - 3306:3306
