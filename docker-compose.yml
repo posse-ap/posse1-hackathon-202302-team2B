@@ -1,29 +1,40 @@
-version: '3'
+version: '3.7'
+
 services:
   nginx:
-    build:
+    build         :
       context: ./nginx
-    depends_on:
+    image         : ichiichiban-web
+    hostname      : ichiichiban-web
+    container_name: ichiichiban-web
+    depends_on    :
       - php
-    ports:
+    ports         :
       - 80:80
-    volumes:
-      - ../ichiichiban:/var/www/laravel:cached
-
+    volumes       :
+      - ../ichiichiban:/var/www/ichiichiban:cached
   php:
-    build:
+    build         :
       context: ./phpfpm
-    volumes:
-      - ../ichiichiban:/var/www/laravel:cached
-
+    image         : ichiichiban-php
+    hostname      : ichiichiban-php
+    container_name: ichiichiban-php
+    volumes       :
+      - ../ichiichiban:/var/www/ichiichiban:cached
   mysql:
     #restart: always
-    build:
+    build         :
       context: ./mysql
-    volumes:
+    image         : ichiichiban-db
+    hostname      : ichiichiban-db
+    container_name: ichiichiban-db
+    volumes       :
       - ./mysql/data:/var/lib/mysql
-    environment:
+    environment   :
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=ichiichiban
-    ports:
+    ports         :
       - 3306:3306
+networks:
+  default:
+    name: ichiichiban-network
