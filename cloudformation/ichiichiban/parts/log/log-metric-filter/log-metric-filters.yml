@@ -1,0 +1,54 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Setting up log metric filters
+Parameters:
+  ApiLogGroupName:
+    Type       : String
+    Description: Api Log Group Name
+    MinLength  : 1
+  ApiMetricNamespace:
+    Type       : String
+    Description: Api Metric Namespace
+    MinLength  : 1
+  WebLogGroupName:
+    Type       : String
+    Description: Web Log Group Name
+    MinLength  : 1
+  WebMetricNamespace:
+    Type       : String
+    Description: Web Metric Namespace
+    MinLength  : 1
+  BatchLogGroupName:
+    Type       : String
+    Description: Batch Log Group Name
+    MinLength  : 1
+  BatchMetricNamespace:
+    Type       : String
+    Description: Batch Metric Namespace
+    MinLength  : 1
+Resources:
+  # ---------------------------------------------------------------#
+  # Create Log Metric Filters
+  # ---------------------------------------------------------------#
+  ApiLogMetricFilters:
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        LogGroupName   : !Ref ApiLogGroupName
+        MetricNamespace: !Ref ApiMetricNamespace
+      TemplateURL: ./log-metric-filter.yml
+  WebLogMetricFilters:
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        LogGroupName   : !Ref WebLogGroupName
+        MetricNamespace: !Ref WebMetricNamespace
+      TemplateURL: ./log-metric-filter.yml
+  BatchLogMetricFilters:
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        LogGroupName   : !Ref BatchLogGroupName
+        MetricNamespace: !Ref BatchMetricNamespace
+      TemplateURL: ./log-metric-filter.yml

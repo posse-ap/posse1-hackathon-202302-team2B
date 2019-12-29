@@ -1,0 +1,36 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Create IAM Role for RDS Monitoring
+Resources:
+  # ---------------------------------------------------------------#
+  # Create IAM Role for RDS Monitoring
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html
+  RDSMonitoringRole:
+    Type      : AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version  : "2012-10-17"
+        Statement:
+          - Effect   : "Allow"
+            Principal:
+              Service:
+                - monitoring.rds.amazonaws.com
+            Action   :
+              - "sts:AssumeRole"
+      ManagedPolicyArns       :
+        - arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole
+Outputs:
+  RDSMonitoringRoleName:
+    Value: !Ref RDSMonitoringRole
+    Export:
+      Name: RDSMonitoringRoleName
+  RDSMonitoringRoleArn:
+    Value: !GetAtt RDSMonitoringRole.Arn
+    Export:
+      Name: RDSMonitoringRoleArn
+  RDSMonitoringRoleRoleId:
+    Value: !GetAtt RDSMonitoringRole.RoleId
+    Export:
+      Name: RDSMonitoringRoleRoleId

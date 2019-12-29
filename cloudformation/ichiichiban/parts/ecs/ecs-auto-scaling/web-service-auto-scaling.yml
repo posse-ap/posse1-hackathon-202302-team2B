@@ -1,0 +1,74 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Setting up ECS Web Service Auto Scaling
+Parameters:
+  WebTaskMaxCapacity:
+    Type       : Number
+    Description: Maximum number of web task
+    MinValue   : 2
+    Default    : 2
+  WebTaskMinCapacity:
+    Type       : Number
+    Description: Minimum number of web task
+    MinValue   : 2
+  ECSCluster:
+    Type       : String
+    Description: ECS Cluster Name
+    MinLength  : 1
+  ECSWebServiceName:
+    Type       : String
+    Description: ECS Web Service Name
+    MinLength  : 1
+  ECSAutoScaleRoleArn:
+    Type       : String
+    Description: ECS Auto Scale Role ARN
+    MinLength  : 1
+  CPUTargetValue:
+    Type       : Number
+    Description: Scaling target value of CPU
+    Default    : 70
+  MemoryTargetValue:
+    Type       : Number
+    Description: Scaling target value of Memory
+    Default    : 70
+Resources:
+  # ---------------------------------------------------------------#
+  # Create Application Auto Scaling ScalableTarget
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalabletarget.html
+  ECSWebServiceAutoScalingScalableTarget:
+    Type      : AWS::ApplicationAutoScaling::ScalableTarget
+    Properties:
+      MaxCapacity      : !Ref WebTaskMaxCapacity
+      MinCapacity      : !Ref WebTaskMinCapacity
+      ResourceId       : !Sub "service/${ECSCluster}/${ECSWebServiceName}"
+      RoleARN          : !Ref ECSAutoScaleRoleArn
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace : ecs
+  # ---------------------------------------------------------------#
+  # Create Application Auto Scaling ScalingPolicy (About CPU and Memory)
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html
+  ECSWebServiceAutoScalingCpuScalingPolicy:
+    Type      : AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName                              : CpuScalingPolicy
+      PolicyType                              : TargetTrackingScaling
+      ScalingTargetId                         : !Ref ECSWebServiceAutoScalingScalableTarget
+      TargetTrackingScalingPolicyConfiguration:
+        DisableScaleIn               : false
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ECSServiceAverageCPUUtilization
+        TargetValue                  : !Ref CPUTargetValue
+  ECSWebServiceAutoScalingMemoryScalingPolicy:
+    Type      : AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName                              : MemoryScalingPolicy
+      PolicyType                              : TargetTrackingScaling
+      ScalingTargetId                         : !Ref ECSWebServiceAutoScalingScalableTarget
+      TargetTrackingScalingPolicyConfiguration:
+        DisableScaleIn               : false
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ECSServiceAverageMemoryUtilization
+        TargetValue                  : !Ref MemoryTargetValue

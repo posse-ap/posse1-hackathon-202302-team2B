@@ -1,0 +1,104 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Setting up Log Kinesis Data Firehose
+Parameters:
+  ProductName:
+    Type       : String
+    Description: Product Name (Ex. MansionValue)
+    MinLength  : 1
+  Environment:
+    Type         : String
+    Default      : Stg
+    AllowedValues:
+      - Stg
+      - Prod
+    Description  : Select Environment
+    MinLength    : 1
+  BucketArn:
+    Type       : String
+    Description: S3 bucket ARN
+    MinLength  : 1
+Resources:
+  # ---------------------------------------------------------------#
+  # Create Log Kinesis Data Firehose
+  # ---------------------------------------------------------------#
+  ApiLogKinesisDataFirehoseRole:
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        Environment          : !Ref Environment
+        BucketArn            : !Ref BucketArn
+        FirehoseLogGroupName : !Sub "/aws/kinesisfirehose/${ProductName}-${Environment}-Api"
+        FirehoseLogStreamName: S3Delivery
+      TemplateURL: ./kinesis-data-firehose-role.yml
+  ApiLogKinesisDataFirehoseDeliveryStream:
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        Environment          : !Ref Environment
+        BucketArn            : !Ref BucketArn
+        FirehoseLogGroupName : !Sub "/aws/kinesisfirehose/${ProductName}-${Environment}-Api"
+        FirehoseLogStreamName: S3Delivery
+        ServiceName          : Api
+        RoleArn              : !GetAtt ApiLogKinesisDataFirehoseRole.Outputs.LogKinesisDataFirehoseRoleArn
+      TemplateURL: ./kinesis-data-firehose-delivery-stream.yml
+  WebLogKinesisDataFirehoseRole:
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        Environment          : !Ref Environment
+        BucketArn            : !Ref BucketArn
+        FirehoseLogGroupName : !Sub "/aws/kinesisfirehose/${ProductName}-${Environment}-Web"
+        FirehoseLogStreamName: S3Delivery
+      TemplateURL: ./kinesis-data-firehose-role.yml
+  WebLogKinesisDataFirehoseDeliveryStream:
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        Environment          : !Ref Environment
+        BucketArn            : !Ref BucketArn
+        FirehoseLogGroupName : !Sub "/aws/kinesisfirehose/${ProductName}-${Environment}-Web"
+        FirehoseLogStreamName: S3Delivery
+        ServiceName          : Web
+        RoleArn              : !GetAtt WebLogKinesisDataFirehoseRole.Outputs.LogKinesisDataFirehoseRoleArn
+      TemplateURL: ./kinesis-data-firehose-delivery-stream.yml
+  BatchLogKinesisDataFirehoseRole:
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        Environment          : !Ref Environment
+        BucketArn            : !Ref BucketArn
+        FirehoseLogGroupName : !Sub "/aws/kinesisfirehose/${ProductName}-${Environment}-Batch"
+        FirehoseLogStreamName: S3Delivery
+      TemplateURL: ./kinesis-data-firehose-role.yml
+  BatchLogKinesisDataFirehoseDeliveryStream:
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        Environment          : !Ref Environment
+        BucketArn            : !Ref BucketArn
+        FirehoseLogGroupName : !Sub "/aws/kinesisfirehose/${ProductName}-${Environment}-Batch"
+        FirehoseLogStreamName: S3Delivery
+        ServiceName          : Batch
+        RoleArn              : !GetAtt BatchLogKinesisDataFirehoseRole.Outputs.LogKinesisDataFirehoseRoleArn
+      TemplateURL: ./kinesis-data-firehose-delivery-stream.yml
+Outputs:
+  ApiLogKinesisDataFirehoseDeliveryStreamName:
+    Description: The name of Api Log Kinesis Data Firehose Delivery Stream
+    Value      : !GetAtt ApiLogKinesisDataFirehoseDeliveryStream.Outputs.LogKinesisDataFirehoseDeliveryStreamName
+  ApiLogKinesisDataFirehoseDeliveryStreamArn:
+    Description: The ARN of Api Log Kinesis Data Firehose Delivery Stream
+    Value      : !GetAtt ApiLogKinesisDataFirehoseDeliveryStream.Outputs.LogKinesisDataFirehoseDeliveryStreamArn
+  WebLogKinesisDataFirehoseDeliveryStreamName:
+    Description: The name of Web Log Kinesis Data Firehose Delivery Stream
+    Value      : !GetAtt WebLogKinesisDataFirehoseDeliveryStream.Outputs.LogKinesisDataFirehoseDeliveryStreamName
+  WebLogKinesisDataFirehoseDeliveryStreamArn:
+    Description: The ARN of Web Log Kinesis Data Firehose Delivery Stream
+    Value      : !GetAtt WebLogKinesisDataFirehoseDeliveryStream.Outputs.LogKinesisDataFirehoseDeliveryStreamArn
+  BatchLogKinesisDataFirehoseDeliveryStreamName:
+    Description: The name of Batch Log Kinesis Data Firehose Delivery Stream
+    Value      : !GetAtt BatchLogKinesisDataFirehoseDeliveryStream.Outputs.LogKinesisDataFirehoseDeliveryStreamName
+  BatchLogKinesisDataFirehoseDeliveryStreamArn:
+    Description: The ARN of Batch Log Kinesis Data Firehose Delivery Stream
+    Value      : !GetAtt BatchLogKinesisDataFirehoseDeliveryStream.Outputs.LogKinesisDataFirehoseDeliveryStreamArn

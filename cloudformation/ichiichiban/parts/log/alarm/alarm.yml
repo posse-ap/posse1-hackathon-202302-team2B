@@ -1,0 +1,86 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Setting up log alarm
+Parameters:
+  AlarmActionArn:
+    Type       : String
+    Description: Alarm Action Arn
+    MinLength  : 1
+  AlarmDescription:
+    Type       : String
+    Description: Alarm Description
+    MinLength  : 1
+  MetricNamespace:
+    Type       : String
+    Description: Metric Namespace
+    MinLength  : 1
+Resources:
+  # ---------------------------------------------------------------#
+  # Create Log Alarms
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-properties-cw-alarm.html
+  LogAlarmError:
+    Type      : AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions      :
+        - !Ref AlarmActionArn
+      AlarmDescription  : !Sub "${AlarmDescription} Error"
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      DatapointsToAlarm : 1
+      EvaluationPeriods : 1
+      MetricName        : Error
+      Namespace         : !Ref MetricNamespace
+      Period            : 60
+      Statistic         : Sum
+      Threshold         : 1
+      TreatMissingData  : missing
+  LogAlarmWarn:
+    Type      : AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions      :
+        - !Ref AlarmActionArn
+      AlarmDescription  : !Sub "${AlarmDescription} Warn"
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      DatapointsToAlarm : 1
+      EvaluationPeriods : 1
+      MetricName        : Warn
+      Namespace         : !Ref MetricNamespace
+      Period            : 60
+      Statistic         : Sum
+      Threshold         : 1
+      TreatMissingData  : missing
+  LogAlarmFatal:
+    Type      : AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions      :
+        - !Ref AlarmActionArn
+      AlarmDescription  : !Sub "${AlarmDescription} Fatal"
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      DatapointsToAlarm : 1
+      EvaluationPeriods : 1
+      MetricName        : Fatal
+      Namespace         : !Ref MetricNamespace
+      Period            : 60
+      Statistic         : Sum
+      Threshold         : 1
+      TreatMissingData  : missing
+Outputs:
+  LogAlarmErrorName:
+    Description: The Name of Log Alarm Error
+    Value      : !Ref LogAlarmError
+  LogAlarmErrorArn :
+    Description: The ARN of Log Alarm Error
+    Value      : !GetAtt LogAlarmError.Arn
+  LogAlarmWarnName :
+    Description: The Name of Log Alarm Warn
+    Value      : !Ref LogAlarmWarn
+  LogAlarmWarnArn  :
+    Description: The ARN of Log Alarm Warn
+    Value      : !GetAtt LogAlarmWarn.Arn
+  LogAlarmFatalName:
+    Description: The Name of Log Alarm Fatal
+    Value      : !Ref LogAlarmFatal
+  LogAlarmFatalArn :
+    Description: The ARN of Log Alarm Fatal
+    Value      : !GetAtt LogAlarmFatal.Arn

@@ -1,0 +1,33 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Setting up Log Subscription Filter
+Parameters:
+  DestinationArn:
+    Type       : String
+    Description: The ARN of Destination
+    MinLength  : 1
+  LogGroupName:
+    Type       : String
+    Description: Log Group Name
+    MinLength  : 1
+  RoleArn:
+    Type       : String
+    Description: The ARN of Role
+    MinLength  : 1
+Resources:
+  # ---------------------------------------------------------------#
+  # Create Log Subscription Filter
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-logs-subscriptionfilter.html
+  LogSubscriptionFilter:
+    Type      : AWS::Logs::SubscriptionFilter
+    Properties:
+      DestinationArn: !Ref DestinationArn
+      FilterPattern : ""
+      LogGroupName  : !Ref LogGroupName
+      RoleArn       : !Ref RoleArn
+Outputs:
+  LogSubscriptionFilterName:
+    Description: The name of Log Subscription Filter
+    Value      : !Ref LogSubscriptionFilter

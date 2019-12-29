@@ -1,0 +1,85 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Setting up EC2 Auto Scaling Group
+Parameters:
+  ProductName:
+    Type       : String
+    Description: Product Name (Ex. MansionValue)
+    MinLength  : 1
+  Environment:
+    Type         : String
+    Default      : Stg
+    AllowedValues:
+      - Stg
+      - Prod
+    Description  : Select Environment
+    MinLength    : 1
+  LaunchConfigurationName:
+    Type       : String
+    Description: EC2 Auto Scaling Group Launch Configuration Name
+    MinLength  : 1
+  MinSize:
+    Type       : Number
+    Default    : 1
+    Description: Minimum number of instances that can be launched in your ECS cluster.
+    MinValue   : 1
+  MaxSize:
+    Type       : Number
+    Default    : 1
+    Description: Maximum number of instances that can be launched in your ECS cluster.
+    MinValue   : 1
+  DesiredCapacity:
+    Type       : Number
+    Default    : 1
+    Description: Number of instances to launch in your ECS cluster.
+    MinValue   : 1
+  TopicARN:
+    Type       : String
+    Description: SNS Topic ARN
+    MinLength  : 1
+  PublicSubnetIds:
+    Type       : List<AWS::EC2::Subnet::Id>
+    Description: Public Subnet IDs
+    MinLength  : 1
+Resources:
+  # ---------------------------------------------------------------#
+  # Create EC2 Auto Scaling Group
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html
+  Ec2AutoScalingGroup:
+    Type      : AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName      : !Sub "${ProductName}-${Environment}"
+      AvailabilityZones         :
+        - ap-northeast-1a
+        - ap-northeast-1c
+      LaunchConfigurationName   : !Ref LaunchConfigurationName
+      MinSize                   : !Ref MinSize
+      MaxSize                   : !Ref MaxSize
+      DesiredCapacity           : !Ref DesiredCapacity
+      MetricsCollection         :
+        - Granularity: 1Minute
+          Metrics    :
+            - GroupInServiceInstances
+            - GroupTotalInstances
+      NotificationConfigurations:
+        - NotificationTypes:
+            - autoscaling:EC2_INSTANCE_LAUNCH
+            - autoscaling:EC2_INSTANCE_LAUNCH_ERROR
+            - autoscaling:EC2_INSTANCE_TERMINATE
+            - autoscaling:EC2_INSTANCE_TERMINATE_ERROR
+            - autoscaling:TEST_NOTIFICATION
+          TopicARN         : !Ref TopicARN
+      VPCZoneIdentifier         : !Ref PublicSubnetIds
+    CreationPolicy:
+      ResourceSignal:
+        Count  : !Ref DesiredCapacity
+        Timeout: PT15M
+    UpdatePolicy:
+      AutoScalingReplacingUpdate:
+        WillReplace: true
+Outputs:
+  Ec2AutoScalingGroupName:
+    Description: The Name of the EC2 Auto Scaling Group
+    Value      : !Ref Ec2AutoScalingGroup

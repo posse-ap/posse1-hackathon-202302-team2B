@@ -1,0 +1,72 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Setting up Api Task Definition
+Parameters:
+  ProductName:
+    Type       : String
+    Description: Product Name (Ex. MansionValue)
+    MinLength  : 1
+  Environment:
+    Type         : String
+    Default      : Stg
+    AllowedValues:
+      - Stg
+      - Prod
+    Description  : Select Environment
+    MinLength    : 1
+  Cpu:
+    Type       : Number
+    Description: Hard limit on CPU for Api containers (CPU Unit Number)
+  Image:
+    Type       : String
+    Description: Api Image
+    MinLength  : 1
+  LogGroupName:
+    Type       : String
+    Description: Log group name
+    MinLength  : 1
+  Memory:
+    Type       : Number
+    Description: Hard limit on memory for Api containers (MiB)
+  ExecutionRoleArn:
+    Type       : String
+    Description: The ARN of the Task Execution Role
+  TaskRoleArn:
+    Type       : String
+    Description: The ARN of the Task Role
+  ApiContainerName:
+    Type       : String
+    Description: Name of API container
+  ApiContainerPort:
+    Type       : Number
+    Description: Port of API container
+Resources:
+  # ---------------------------------------------------------------#
+  # Create Api Task Definition
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html
+  ApiTaskDefinition:
+    Type      : AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Cpu             : !Ref Cpu
+          Image           : !Ref Image
+          LogConfiguration:
+            LogDriver: awslogs
+            Options  :
+              awslogs-group        : !Ref LogGroupName
+              awslogs-region       : ap-northeast-1
+              awslogs-stream-prefix: api
+          Memory          : !Ref Memory
+          Name            : !Ref ApiContainerName
+          PortMappings    :
+            - ContainerPort: !Ref ApiContainerPort
+              HostPort     : 0
+      ExecutionRoleArn    : !Ref ExecutionRoleArn
+      Family              : !Sub "${ProductName}-${Environment}-Api"
+      TaskRoleArn         : !Ref TaskRoleArn
+Outputs:
+  ApiTaskDefinitionArn:
+    Description: The ARN of the Api Task Definition
+    Value      : !Ref ApiTaskDefinition

@@ -1,0 +1,66 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Setting up CloudWatch logs and alarm
+Parameters:
+  ApiLogGroupName:
+    Type       : String
+    Description: Api Log Group Name
+    MinLength  : 1
+  WebLogGroupName:
+    Type       : String
+    Description: Web Log Group Name
+    MinLength  : 1
+  BatchLogGroupName:
+    Type       : String
+    Description: Batch Log Group Name
+    MinLength  : 1
+  RetentionInDays:
+    Type       : Number
+    Description: Number of days to keep logs
+    MinValue   : 3
+    Default    : 3
+Resources:
+  # ---------------------------------------------------------------#
+  # Create Log Groups
+  # ---------------------------------------------------------------#
+  ApiLogGroup  :
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        LogGroupName   : !Ref ApiLogGroupName
+        RetentionInDays: !Ref RetentionInDays
+      TemplateURL: ./log-group.yml
+  WebLogGroup  :
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        LogGroupName   : !Ref WebLogGroupName
+        RetentionInDays: !Ref RetentionInDays
+      TemplateURL: ./log-group.yml
+  BatchLogGroup:
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        LogGroupName   : !Ref BatchLogGroupName
+        RetentionInDays: !Ref RetentionInDays
+      TemplateURL: ./log-group.yml
+Outputs:
+  ApiLogGroupName:
+    Description: The Name of Api Log Group
+    Value      : !GetAtt ApiLogGroup.Outputs.LogGroupName
+  ApiLogGroupArn :
+    Description: The ARN of Api Log Group
+    Value      : !GetAtt ApiLogGroup.Outputs.LogGroupArn
+  WebLogGroupName:
+    Description: The Name of Web Log Group
+    Value      : !GetAtt WebLogGroup.Outputs.LogGroupName
+  WebLogGroupArn :
+    Description: The ARN of Web Log Group
+    Value      : !GetAtt WebLogGroup.Outputs.LogGroupArn
+  BatchLogGroupName:
+    Description: The Name of Batch Log Group
+    Value      : !GetAtt BatchLogGroup.Outputs.LogGroupName
+  BatchLogGroupArn :
+    Description: The ARN of Batch Log Group
+    Value      : !GetAtt BatchLogGroup.Outputs.LogGroupArn

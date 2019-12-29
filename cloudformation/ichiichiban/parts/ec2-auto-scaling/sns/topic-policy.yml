@@ -1,0 +1,37 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Setting up Log SNS Topic Policy
+Parameters:
+  TopicArn:
+    Type       : String
+    Description: The ARN of log SNS topic
+    MinLength  : 1
+  Ec2AutoScalingGroupArn:
+    Type       : String
+    Description: The ARN of EC2 Auto Scaling Group
+    MinLength  : 1
+Resources:
+  # ---------------------------------------------------------------#
+  # Create SNS Topic Policy
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-properties-sns-policy.html
+  SnsTopicPolicy:
+    Type      : AWS::SNS::TopicPolicy
+    Properties:
+      PolicyDocument:
+        Version  : "2012-10-17"
+        Statement:
+          - Effect   : Allow
+            Principal:
+              "AWS": "*"
+            Action   :
+              - "sns:Publish"
+            Resource : !Ref TopicArn
+            Condition:
+              StringEquals:
+                "AWS:SourceOwner": !Ref "AWS::AccountId"
+              ArnLike     :
+                "AWS:SourceArn"  : !Ref Ec2AutoScalingGroupArn
+      Topics        :
+        - !Ref TopicArn

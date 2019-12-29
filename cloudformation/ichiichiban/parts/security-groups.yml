@@ -1,0 +1,76 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Setting up Security Groups
+Parameters:
+  ProductName:
+    Type       : String
+    Description: Product Name (Ex. MansionValue)
+    MinLength  : 1
+  Environment:
+    Type         : String
+    Default      : Stg
+    AllowedValues:
+      - Stg
+      - Prod
+    Description  : Select Environment
+    MinLength    : 1
+  VpcId:
+    Type       : AWS::EC2::VPC::Id
+    Description: VPC ID
+    MinLength  : 1
+Resources:
+  # ---------------------------------------------------------------#
+  # Create Security Groups
+  #   - ALB (Web, API)
+  #   - ECS
+  #   - RDS
+  # ---------------------------------------------------------------#
+  EcsCloudFrontSecurityGroups:
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        VpcId: !Ref VpcId
+      TemplateURL: ./../../utilities/security-groups/cloudfront-security-groups.yml
+  EcsSecurityGroup:
+    Type      : AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription    : !Sub "${ProductName}-${Environment} ECS Security Group"
+      GroupName           : !Sub "${ProductName}-${Environment}-ECS"
+      SecurityGroupIngress:
+        - Description          : Access from Ecs CloudFront Security Group G
+          IpProtocol           : tcp
+          FromPort             : 1024
+          ToPort               : 65535
+          SourceSecurityGroupId: !GetAtt EcsCloudFrontSecurityGroups.Outputs.CloudFrontSecurityGroupGId
+        - Description          : Access from Ecs CloudFront Security Group R
+          IpProtocol           : tcp
+          FromPort             : 1024
+          ToPort               : 65535
+          SourceSecurityGroupId: !GetAtt EcsCloudFrontSecurityGroups.Outputs.CloudFrontSecurityGroupRId
+      VpcId               : !Ref VpcId
+  RdsSecurityGroup:
+    Type      : AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription    : !Sub "${ProductName}-${Environment} RDS Security Group"
+      GroupName           : !Sub "${ProductName}-${Environment}-RDS"
+      SecurityGroupIngress:
+        - Description          : PostgreSQL Access from ECS Security Group
+          IpProtocol           : tcp
+          FromPort             : 5432
+          ToPort               : 5432
+          SourceSecurityGroupId: !GetAtt EcsSecurityGroup.GroupId
+      VpcId               : !Ref VpcId
+Outputs:
+  EcsCloudFrontSecurityGroupGId:
+    Description: The ID of the CloudFront Security Group G
+    Value      : !GetAtt EcsCloudFrontSecurityGroups.Outputs.CloudFrontSecurityGroupGId
+  EcsCloudFrontSecurityGroupRId:
+    Description: The ID of the CloudFront Security Group R
+    Value      : !GetAtt EcsCloudFrontSecurityGroups.Outputs.CloudFrontSecurityGroupRId
+  EcsSecurityGroupId:
+    Description: The ID of the ECS Security Group
+    Value      : !GetAtt EcsSecurityGroup.GroupId
+  RdsSecurityGroupId:
+    Description: The ID of the RDS Security Group
+    Value      : !GetAtt RdsSecurityGroup.GroupId

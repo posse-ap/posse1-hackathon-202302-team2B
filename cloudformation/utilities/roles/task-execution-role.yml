@@ -1,0 +1,36 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Create IAM Role for Task Execution
+Resources:
+  # ---------------------------------------------------------------#
+  # Create IAM Role for Task Execution
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html
+  TaskExecutionRole:
+    Type      : AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version  : "2012-10-17"
+        Statement:
+          - Effect   : Allow
+            Principal:
+              Service:
+                - ecs-tasks.amazonaws.com
+            Action   :
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+Outputs:
+  TaskExecutionRoleName:
+    Value: !Ref TaskExecutionRole
+    Export:
+      Name: TaskExecutionRoleName
+  TaskExecutionRoleArn:
+    Value: !GetAtt TaskExecutionRole.Arn
+    Export:
+      Name: TaskExecutionRoleArn
+  TaskExecutionRoleRoleId:
+    Value: !GetAtt TaskExecutionRole.RoleId
+    Export:
+      Name: TaskExecutionRoleRoleId

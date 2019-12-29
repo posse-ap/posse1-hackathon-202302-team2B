@@ -1,0 +1,112 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Setting up ECS Api Services
+Parameters:
+  ProductName:
+    Type       : String
+    Description: Product Name (Ex. MansionValue)
+    MinLength  : 1
+  Environment:
+    Type         : String
+    Default      : Stg
+    AllowedValues:
+      - Stg
+      - Prod
+    Description  : Select Environment
+    MinLength    : 1
+  ApiCpu:
+    Type       : Number
+    Description: Hard limit on CPU for Api containers (CPU Unit Number)
+    MinValue   : 256
+  ApiMemory:
+    Type       : Number
+    Description: Hard limit of memory for Api containers (MiB)
+    MinValue   : 1024
+  LogGroupName:
+    Type       : String
+    Description: Log group name
+    MinLength  : 1
+  ExecutionRoleArn:
+    Type       : String
+    Description: Task Execution Role ARN
+    MinLength  : 1
+  TaskRoleArn:
+    Type       : String
+    Description: Task Role ARN
+    MinLength  : 1
+  ECSCluster:
+    Type       : String
+    Description: ECS Cluster Name
+    MinLength  : 1
+  ApiDesiredCount:
+    Type       : Number
+    Description: Desired Count of Api Task
+    MinValue   : 1
+  TargetGroupArn:
+    Type       : String
+    Description: Target Group ARN
+    MinLength  : 1
+  ECSAutoScaleRoleArn:
+    Type       : String
+    Description: ECS Auto Scale Role ARN
+    MinLength  : 1
+Mappings:
+  ApiEcs:
+    Stg :
+      Image: 906318407081.dkr.ecr.ap-northeast-1.amazonaws.com/realnetplus-stg-api:latest
+    Prod:
+      Image: 906318407081.dkr.ecr.ap-northeast-1.amazonaws.com/realnetplus-prod-api:latest
+Resources:
+  # ---------------------------------------------------------------#
+  # Create Api Task Definition
+  # ---------------------------------------------------------------#
+  ApiTaskDefinition:
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        ProductName     : !Ref ProductName
+        Environment     : !Ref Environment
+        Cpu             : !Ref ApiCpu
+        Image           : !FindInMap [ ApiEcs, !Ref Environment, Image ]
+        LogGroupName    : !Ref LogGroupName
+        Memory          : !Ref ApiMemory
+        ExecutionRoleArn: !Ref ExecutionRoleArn
+        TaskRoleArn     : !Ref TaskRoleArn
+        ApiContainerName: Api
+        ApiContainerPort: 8080
+      TemplateURL: ./task-definitions/api.yml
+  # ---------------------------------------------------------------#
+  # Create API Service
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html
+  ECSApiService:
+    Type      : AWS::ECS::Service
+    Properties:
+      Cluster       : !Ref ECSCluster
+      DesiredCount  : !Ref ApiDesiredCount
+      LaunchType    : EC2
+      LoadBalancers :
+        - ContainerName : Api
+          ContainerPort : 8080
+          TargetGroupArn: !Ref TargetGroupArn
+      ServiceName   : !Sub "${ProductName}-${Environment}-Api"
+      TaskDefinition: !GetAtt ApiTaskDefinition.Outputs.ApiTaskDefinitionArn
+  # ---------------------------------------------------------------#
+  # Create API Service Auto Scaling
+  # ---------------------------------------------------------------#
+  ECSApiServiceAutoScaling:
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        ApiTaskMaxCapacity : 20 # 4GiB(4096MiB) / 1024MiB(Apiコンテナのメモリ) * 5台 = 20
+        ApiTaskMinCapacity : 2
+        ECSCluster         : !Ref ECSCluster
+        ECSApiServiceName  : !GetAtt ECSApiService.Name
+        ECSAutoScaleRoleArn: !Ref ECSAutoScaleRoleArn
+        CPUTargetValue     : 70
+        MemoryTargetValue  : 70
+      Tags:
+        - Key  : Name
+          Value: !Sub "RealnetPlus-${Environment}"
+      TemplateURL: ./ecs-auto-scaling/api-service-auto-scaling.yml

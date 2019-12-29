@@ -1,0 +1,44 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Create IAM Role for application auto scaling in ECS
+Resources:
+  # ---------------------------------------------------------------#
+  # Create IAM Role for application auto scaling in ECS
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html
+  ECSAutoScaleRole:
+    Type      : AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version  : "2012-10-17"
+        Statement:
+          - Effect   : Allow
+            Principal:
+              Service:
+                - application-autoscaling.amazonaws.com
+            Action   :
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName    : ecs-autoscale
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'ecs:DescribeServices'
+                  - 'ecs:UpdateService'
+                  - 'cloudwatch:DescribeAlarms'
+                Resource: '*'
+Outputs:
+  ECSAutoScaleRoleName:
+    Value: !Ref ECSAutoScaleRole
+    Export:
+      Name: ECSAutoScaleRoleName
+  ECSAutoScaleRoleArn:
+    Value: !GetAtt ECSAutoScaleRole.Arn
+    Export:
+      Name: ECSAutoScaleRoleArn
+  ECSAutoScaleRoleId:
+    Value: !GetAtt ECSAutoScaleRole.RoleId
+    Export:
+      Name: ECSAutoScaleRoleId

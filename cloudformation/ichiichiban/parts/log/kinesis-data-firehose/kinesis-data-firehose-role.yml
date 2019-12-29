@@ -1,0 +1,72 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Setting up Role for Log Kinesis Data Firehose
+Parameters:
+  Environment:
+    Type         : String
+    Default      : Stg
+    AllowedValues:
+      - Stg
+      - Prod
+    Description  : Select Environment
+    MinLength    : 1
+  BucketArn:
+    Type       : String
+    Description: S3 bucket ARN
+    MinLength  : 1
+  FirehoseLogGroupName:
+    Type       : String
+    Description: Firehose Log Group Name
+    MinLength  : 1
+  FirehoseLogStreamName:
+    Type       : String
+    Description: Firehose Log Stream Name
+    MinLength  : 1
+Resources:
+  # ---------------------------------------------------------------#
+  # Create Log Kinesis Data Firehose Role
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html
+  # https://docs.aws.amazon.com/ja_jp/firehose/latest/dev/controlling-access.html#using-iam-s3
+  LogKinesisDataFirehoseRole:
+    Type      : AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version  : "2012-10-17"
+        Statement:
+          - Effect   : "Allow"
+            Principal:
+              Service:
+                - firehose.amazonaws.com
+            Action   :
+              - "sts:AssumeRole"
+            Condition:
+              StringEquals:
+                sts:ExternalId: !Ref "AWS::AccountId"
+      Policies                :
+        - PolicyName    : kinesis-data-firehose
+          PolicyDocument:
+            Statement:
+              - Effect  : Allow
+                Action  :
+                  - "s3:AbortMultipartUpload"
+                  - "s3:GetBucketLocation"
+                  - "s3:GetObject"
+                  - "s3:ListBucket"
+                  - "s3:ListBucketMultipartUploads"
+                  - "s3:PutObject"
+                Resource:
+                  - !Sub "${BucketArn}/KinesisDataFirehose"
+                  - !Sub "${BucketArn}/KinesisDataFirehose/${Environment}/*"
+              - Effect  : Allow
+                Action  :
+                  - "logs:PutLogEvents"
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/kinesisfirehose/${FirehoseLogGroupName}:log-stream:${FirehoseLogStreamName}"
+Outputs:
+  LogKinesisDataFirehoseRoleName:
+    Description: The name of Log Kinesis Data Firehose Role
+    Value      : !Ref LogKinesisDataFirehoseRole
+  LogKinesisDataFirehoseRoleArn:
+    Description: The ARN of Log Kinesis Data Firehose Role
+    Value      : !GetAtt LogKinesisDataFirehoseRole.Arn

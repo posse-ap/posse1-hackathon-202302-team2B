@@ -1,0 +1,197 @@
+---
+# ---------------------------------------------------------------#
+# Create network
+#   - VPC
+#   - PublicSubnetA, PublicSubnetC, PrivateSubnetA, PrivateSubnetC
+#   - InternetGateway (Attach VPC)
+#   - RouteTable (PublicSubnet, PrivateSubnetA, PrivateSubnetC)
+# ---------------------------------------------------------------#
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Create network
+Parameters:
+  Environment:
+    Type         : String
+    Default      : Prod
+    AllowedValues:
+      - Stg
+      - Prod
+    Description  : Select Environment
+    MinLength    : 1
+Mappings:
+  VPC:
+    Stg :
+      VpcCidrBlock           : 172.17.16.0/20
+      PublicSubnetACidrBlock : 172.17.16.0/24
+      PublicSubnetCCidrBlock : 172.17.18.0/24
+      PrivateSubnetACidrBlock: 172.17.20.0/24
+      PrivateSubnetCCidrBlock: 172.17.22.0/24
+    Prod:
+      VpcCidrBlock           : 172.17.0.0/20
+      PublicSubnetACidrBlock : 172.17.0.0/24
+      PublicSubnetCCidrBlock : 172.17.2.0/24
+      PrivateSubnetACidrBlock: 172.17.4.0/24
+      PrivateSubnetCCidrBlock: 172.17.6.0/24
+Resources:
+  # ---------------------------------------------------------------#
+  # Create VPC
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpc.html
+  VPC:
+    Type      : AWS::EC2::VPC
+    Properties:
+      CidrBlock         : !FindInMap [ VPC, !Ref Environment, VpcCidrBlock ]
+      EnableDnsHostnames: true
+      EnableDnsSupport  : true
+      InstanceTenancy   : default
+      Tags              :
+        - Key  : Name
+          Value: !Sub "IchiIchiban-${Environment}"
+  # ---------------------------------------------------------------#
+  # Create Subnet
+  #           - Public  ap-northeast-1a
+  #           - Private ap-northeast-1a
+  #           - Public  ap-northeast-1c
+  #           - Private ap-northeast-1c
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
+  PublicSubnetA:
+    Type      : AWS::EC2::Subnet
+    Properties:
+      VpcId              : !Ref VPC
+      AvailabilityZone   : ap-northeast-1a
+      CidrBlock          : !FindInMap [ VPC, !Ref Environment, PublicSubnetACidrBlock ]
+      MapPublicIpOnLaunch: true
+      Tags               :
+        - Key  : Name
+          Value: !Sub "IchiIchiban-${Environment} Pub-a"
+  PrivateSubnetA:
+    Type      : AWS::EC2::Subnet
+    Properties:
+      VpcId              : !Ref VPC
+      AvailabilityZone   : ap-northeast-1a
+      CidrBlock          : !FindInMap [ VPC, !Ref Environment, PrivateSubnetACidrBlock ]
+      MapPublicIpOnLaunch: true
+      Tags               :
+        - Key  : Name
+          Value: !Sub "IchiIchiban-${Environment} Pri-a"
+  PublicSubnetC:
+    Type      : AWS::EC2::Subnet
+    Properties:
+      VpcId              : !Ref VPC
+      AvailabilityZone   : ap-northeast-1c
+      CidrBlock          : !FindInMap [ VPC, !Ref Environment, PublicSubnetCCidrBlock ]
+      MapPublicIpOnLaunch: true
+      Tags               :
+        - Key  : Name
+          Value: !Sub "IchiIchiban-${Environment} Pub-c"
+  PrivateSubnetC:
+    Type      : AWS::EC2::Subnet
+    Properties:
+      VpcId              : !Ref VPC
+      AvailabilityZone   : ap-northeast-1c
+      CidrBlock          : !FindInMap [ VPC, !Ref Environment, PrivateSubnetCCidrBlock ]
+      MapPublicIpOnLaunch: true
+      Tags               :
+        - Key  : Name
+          Value: !Sub "IchiIchiban-${Environment} Pri-c"
+  # ---------------------------------------------------------------#
+  # Create InternetGateway, and attach VPC
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-internetgateway.html
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpc-gateway-attachment.html
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+          - Key  : Name
+            Value: !Sub "IchiIchiban-${Environment}"
+  InternetGatewayAttachment:
+    Type      : AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId            : !Ref VPC
+  # ---------------------------------------------------------------#
+  # Create Route Table, and set default route
+  #             - Public Subnet
+  #             - Private Subnet ap-northeast-1a
+  #             - Private Subnet ap-northeast-1c
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route-table.html
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html
+  RouteTablePublicSubnet:
+    Type      : AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key  : Name
+          Value: !Sub "IchiIchiban-${Environment} Pub"
+  DefaultRoutePublicSubnet:
+    Type      : AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId           : !Ref InternetGateway
+      RouteTableId        : !Ref RouteTablePublicSubnet
+  RouteTablePrivateSubnetA:
+    Type      : AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key  : Name
+          Value: !Sub "IchiIchiban-${Environment} Pri-a"
+  RouteTablePrivateSubnetC:
+    Type      : AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key  : Name
+          Value: !Sub "IchiIchiban-${Environment} Pri-c"
+  # ---------------------------------------------------------------#
+  # Associates a subnet with a route table
+  #               - PublicSubnetA  <-> RouteTablePublicSubnet
+  #               - PrivateSubnetA <-> RouteTablePrivateSubnetA
+  #               - PublicSubnetC  <-> RouteTablePublicSubnet
+  #               - PrivateSubnetC <-> RouteTablePrivateSubnetC
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet-route-table-assoc.html
+  PublicSubnetARouteTableAssociation:
+    Type      : AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTablePublicSubnet
+      SubnetId    : !Ref PublicSubnetA
+  PrivateSubnetARouteTableAssociation:
+    Type      : AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTablePrivateSubnetA
+      SubnetId    : !Ref PrivateSubnetA
+  PublicSubnetCRouteTableAssociation:
+    Type      : AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTablePublicSubnet
+      SubnetId    : !Ref PublicSubnetC
+  PrivateSubnetCRouteTableAssociation:
+    Type      : AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTablePrivateSubnetC
+      SubnetId    : !Ref PrivateSubnetC
+Outputs:
+  VpcId:
+    Value: !Ref VPC
+    Export:
+      Name: !Sub "IchiIchiban-${Environment}-VpcId"
+  PublicSubnetAId:
+    Value: !Ref PublicSubnetA
+    Export:
+      Name: !Sub "IchiIchiban-${Environment}-PublicSubnetAId"
+  PrivateSubnetAId:
+    Value: !Ref PrivateSubnetA
+    Export:
+      Name: !Sub "IchiIchiban-${Environment}-PrivateSubnetAId"
+  PublicSubnetCId:
+    Value: !Ref PublicSubnetC
+    Export:
+      Name: !Sub "IchiIchiban-${Environment}-PublicSubnetCId"
+  PrivateSubnetCId:
+    Value: !Ref PrivateSubnetC
+    Export:
+      Name: !Sub "IchiIchiban-${Environment}-PrivateSubnetCId"

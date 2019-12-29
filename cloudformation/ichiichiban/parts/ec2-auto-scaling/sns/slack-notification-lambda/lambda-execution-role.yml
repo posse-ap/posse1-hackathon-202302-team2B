@@ -1,0 +1,30 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Setting up Lambda execution role
+Resources:
+  # ---------------------------------------------------------------#
+  # Create IAM Role for Lambda execition
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html
+  LambdaExecutionRole:
+    Type      : AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version  : "2012-10-17"
+        Statement:
+          - Effect   : "Allow"
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action   :
+              - "sts:AssumeRole"
+      ManagedPolicyArns       :
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+Outputs:
+  LambdaExecutionRoleName:
+    Description: The Name of Lambda Execution Role
+    Value      : !Ref LambdaExecutionRole
+  LambdaExecutionRoleArn :
+    Description: The ARN of Lambda Execution Role
+    Value      : !GetAtt LambdaExecutionRole.Arn

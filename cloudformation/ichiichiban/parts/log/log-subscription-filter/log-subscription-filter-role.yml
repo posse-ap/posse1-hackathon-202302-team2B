@@ -1,0 +1,63 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Setting up Log Subscription Filter Role
+Parameters:
+  ProductName:
+    Type       : String
+    Description: Product Name (Ex. MansionValue)
+    MinLength  : 1
+  Environment:
+    Type         : String
+    Default      : Stg
+    AllowedValues:
+      - Stg
+      - Prod
+    Description  : Select Environment
+    MinLength    : 1
+  DeliveryStreamArn:
+    Type       : String
+    Description: The Arn of Log Kinesis Data Firehose Delivery Stream
+    MinLength  : 1
+  RoleName:
+    Type       : String
+    Description: The name of Role
+    MinLength  : 1
+Resources:
+  # ---------------------------------------------------------------#
+  # Create Log Subscription Filter
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html
+  LogSubscriptionFilterRole:
+    Type      : AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version  : "2012-10-17"
+        Statement:
+          - Effect   : "Allow"
+            Principal:
+              Service:
+                - !Sub "logs.${AWS::Region}.amazonaws.com"
+            Action   :
+              - "sts:AssumeRole"
+      Policies                :
+        - PolicyName    : log-subscription-filter-policy
+          PolicyDocument:
+            Statement:
+              - Effect  : Allow
+                Action  :
+                  - "firehose:PutRecord"
+                  - "firehose:PutRecords"
+                Resource: !Ref DeliveryStreamArn
+              - Effect  : Allow
+                Action  :
+                  - "iam:PassRole"
+                Resource: !Sub "arn:aws:iam::${AWS::AccountId}:role/${RoleName}"
+      RoleName: !Ref RoleName
+Outputs:
+  LogSubscriptionFilterRoleName:
+    Description: The name of Log Subscription Filter Role
+    Value      : !Ref LogSubscriptionFilterRole
+  LogSubscriptionFilterRoleArn:
+    Description: The ARN of Log Subscription Filter Role
+    Value      : !GetAtt LogSubscriptionFilterRole.Arn

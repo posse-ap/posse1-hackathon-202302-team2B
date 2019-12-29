@@ -1,0 +1,50 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Create IAM Role for allowing ECS calls in EC2
+Resources:
+  # ---------------------------------------------------------------#
+  # Create IAM Role for allowing ECS calls in EC2
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html
+  EC2ECSRole:
+    Type      : AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version  : "2012-10-17"
+        Statement:
+          - Effect   : Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action   :
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName    : ec2-ecs
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'ecs:CreateCluster'
+                  - 'ecs:DeregisterContainerInstance'
+                  - 'ecs:DiscoverPollEndpoint'
+                  - 'ecs:Poll'
+                  - 'ecs:RegisterContainerInstance'
+                  - 'ecs:StartTelemetrySession'
+                  - 'ecs:Submit*'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                Resource: '*'
+Outputs:
+  EC2ECSRoleName:
+    Value: !Ref EC2ECSRole
+    Export:
+      Name: EC2ECSRoleName
+  EC2ECSRoleArn:
+    Value: !GetAtt EC2ECSRole.Arn
+    Export:
+      Name: EC2ECSRoleArn
+  EC2ECSRoleRoleId:
+    Value: !GetAtt EC2ECSRole.RoleId
+    Export:
+      Name: EC2ECSRoleRoleId

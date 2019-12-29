@@ -1,0 +1,50 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Setting up EC2 Auto Scaling Group
+Parameters:
+  AutoScalingGroupName:
+    Type       : String
+    Description: EC2 Auto Scaling Group Name
+    MinLength  : 1
+  ClusterName:
+    Type       : String
+    Description: ECS Cluster Name
+    MinLength  : 1
+Resources:
+  # ---------------------------------------------------------------#
+  # Create EC2 Auto Scaling Group Scaling Policies
+  # ---------------------------------------------------------------#
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-properties-as-policy.html
+  CpuScalingPolicy:
+    Type      : AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AutoScalingGroupName       : !Ref AutoScalingGroupName
+      PolicyType                 : TargetTrackingScaling
+      TargetTrackingConfiguration:
+        CustomizedMetricSpecification:
+          Dimensions:
+            - Name : ClusterName
+              Value: !Ref ClusterName
+          MetricName: CPUUtilization
+          Namespace : AWS/ECS
+          Statistic : Average
+          Unit      : Percent
+        DisableScaleIn               : false
+        TargetValue                  : 60
+  MemoryScalingPolicy:
+    Type      : AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AutoScalingGroupName       : !Ref AutoScalingGroupName
+      PolicyType                 : TargetTrackingScaling
+      TargetTrackingConfiguration:
+        CustomizedMetricSpecification:
+          Dimensions:
+            - Name : ClusterName
+              Value: !Ref ClusterName
+          MetricName: MemoryUtilization
+          Namespace : AWS/ECS
+          Statistic : Average
+          Unit      : Percent
+        DisableScaleIn               : false
+        TargetValue                  : 60

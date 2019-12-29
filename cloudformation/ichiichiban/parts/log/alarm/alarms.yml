@@ -1,0 +1,89 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Setting up log alarm
+Parameters:
+  ProductName:
+    Type       : String
+    Description: Product Name (Ex. MansionValue)
+    MinLength  : 1
+  Environment:
+    Type         : String
+    Default      : Stg
+    AllowedValues:
+      - Stg
+      - Prod
+    Description  : Select Environment
+    MinLength    : 1
+  AlarmActionArn:
+    Type       : String
+    Description: Alarm Action Arn
+    MinLength    : 1
+  ApiMetricNamespace:
+    Type       : String
+    Description: Api Metric Namespace
+    MinLength  : 1
+  WebMetricNamespace:
+    Type       : String
+    Description: Web Metric Namespace
+    MinLength  : 1
+  BatchMetricNamespace:
+    Type       : String
+    Description: Batch Metric Namespace
+    MinLength  : 1
+Resources:
+  # ---------------------------------------------------------------#
+  # Create Log Alarms
+  # ---------------------------------------------------------------#
+  ApiLogAlarm:
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        AlarmActionArn  : !Ref AlarmActionArn
+        AlarmDescription: !Sub "${ProductName}-${Environment} Api Alarm"
+        MetricNamespace : !Ref ApiMetricNamespace
+      TemplateURL: ./alarm.yml
+  WebLogAlarm:
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        AlarmActionArn  : !Ref AlarmActionArn
+        AlarmDescription: !Sub "${ProductName}-${Environment} Web Alarm"
+        MetricNamespace : !Ref WebMetricNamespace
+      TemplateURL: ./alarm.yml
+  BatchLogAlarm:
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        AlarmActionArn  : !Ref AlarmActionArn
+        AlarmDescription: !Sub "${ProductName}-${Environment} Batch Alarm"
+        MetricNamespace : !Ref BatchMetricNamespace
+      TemplateURL: ./alarm.yml
+Outputs:
+  ApiLogAlarmErrorArn  :
+    Description: The ARN of Api Log Alarm Error
+    Value      : !GetAtt ApiLogAlarm.Outputs.LogAlarmErrorArn
+  ApiLogAlarmWarnArn   :
+    Description: The ARN of Api Log Alarm Warn
+    Value      : !GetAtt ApiLogAlarm.Outputs.LogAlarmWarnArn
+  ApiLogAlarmFatalArn  :
+    Description: The ARN of Api Log Alarm Fatal
+    Value      : !GetAtt ApiLogAlarm.Outputs.LogAlarmFatalArn
+  WebLogAlarmErrorArn  :
+    Description: The ARN of Web Log Alarm Error
+    Value      : !GetAtt WebLogAlarm.Outputs.LogAlarmErrorArn
+  WebLogAlarmWarnArn   :
+    Description: The ARN of Web Log Alarm Warn
+    Value      : !GetAtt WebLogAlarm.Outputs.LogAlarmWarnArn
+  WebLogAlarmFatalArn  :
+    Description: The ARN of Web Log Alarm Fatal
+    Value      : !GetAtt WebLogAlarm.Outputs.LogAlarmFatalArn
+  BatchLogAlarmErrorArn:
+    Description: The ARN of Batch Log Alarm Error
+    Value      : !GetAtt BatchLogAlarm.Outputs.LogAlarmErrorArn
+  BatchLogAlarmWarnArn :
+    Description: The ARN of Batch Log Alarm Warn
+    Value      : !GetAtt BatchLogAlarm.Outputs.LogAlarmWarnArn
+  BatchLogAlarmFatalArn:
+    Description: The ARN of Batch Log Alarm Fatal
+    Value      : !GetAtt BatchLogAlarm.Outputs.LogAlarmFatalArn

@@ -1,0 +1,46 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description:
+  Create CloudFront Security Groups
+Parameters:
+  VpcId:
+    Type       : AWS::EC2::VPC::Id
+    Description: VPC ID
+    MinLength  : 1
+Resources:
+  # ---------------------------------------------------------------#
+  # Create Security Groups
+  # ---------------------------------------------------------------#
+  CloudFrontSecurityGroupG:
+    Type      : AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: CloudFront Security Group
+      GroupName       : CloudFront_G
+      Tags            :
+        - Key  : Name
+          Value: cloudfront_g
+        - Key  : AutoUpdate
+          Value: true
+        - Key  : Protocol
+          Value: https
+      VpcId           : !Ref VpcId
+  CloudFrontSecurityGroupR:
+    Type      : AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: CloudFront Security Group
+      GroupName       : CloudFront_R
+      Tags            :
+        - Key  : Name
+          Value: cloudfront_r
+        - Key  : AutoUpdate
+          Value: true
+        - Key  : Protocol
+          Value: https
+      VpcId           : !Ref VpcId
+Outputs:
+  CloudFrontSecurityGroupGId:
+    Description: The ID of the CloudFront Security Group G
+    Value      : !GetAtt CloudFrontSecurityGroupG.GroupId
+  CloudFrontSecurityGroupRId:
+    Description: The ID of the CloudFront Security Group R
+    Value      : !GetAtt CloudFrontSecurityGroupR.GroupId

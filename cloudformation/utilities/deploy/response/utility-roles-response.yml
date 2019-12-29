@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Create Roles
+Resources:
+  CloudWatchEventEcsRole:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.ap-northeast-1.amazonaws.com/utilities-cloudformation-template/1bfe9bded2a2f85ccd093d4bf8f1250b.template
+  EC2ECSRole:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.ap-northeast-1.amazonaws.com/utilities-cloudformation-template/2d80ecf221eba5a4b19732935319a3e6.template
+  ECSAutoScaleRole:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.ap-northeast-1.amazonaws.com/utilities-cloudformation-template/043f118a6474526aacd7456b5e7e65fd.template
+  EcsInstanceProfileRole:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.ap-northeast-1.amazonaws.com/utilities-cloudformation-template/2be8888a1a6c8b3869c07e3bcaf2b043.template
+  LambdaBasicExecutionRole:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.ap-northeast-1.amazonaws.com/utilities-cloudformation-template/b233d11e10a8cf187b061ec89de4c996.template
+  RDSMonitoringRole:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.ap-northeast-1.amazonaws.com/utilities-cloudformation-template/77a1522a2db52636866718787455753d.template
+  TaskExecutionRole:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.ap-northeast-1.amazonaws.com/utilities-cloudformation-template/90205ceffcc97bd011e212baee013273.template
