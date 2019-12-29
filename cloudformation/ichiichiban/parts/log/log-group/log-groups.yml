@@ -11,10 +11,6 @@ Parameters:
     Type       : String
     Description: Web Log Group Name
     MinLength  : 1
-  BatchLogGroupName:
-    Type       : String
-    Description: Batch Log Group Name
-    MinLength  : 1
   RetentionInDays:
     Type       : Number
     Description: Number of days to keep logs
@@ -38,13 +34,6 @@ Resources:
         LogGroupName   : !Ref WebLogGroupName
         RetentionInDays: !Ref RetentionInDays
       TemplateURL: ./log-group.yml
-  BatchLogGroup:
-    Type      : AWS::CloudFormation::Stack
-    Properties:
-      Parameters:
-        LogGroupName   : !Ref BatchLogGroupName
-        RetentionInDays: !Ref RetentionInDays
-      TemplateURL: ./log-group.yml
 Outputs:
   ApiLogGroupName:
     Description: The Name of Api Log Group
@@ -58,9 +47,3 @@ Outputs:
   WebLogGroupArn :
     Description: The ARN of Web Log Group
     Value      : !GetAtt WebLogGroup.Outputs.LogGroupArn
-  BatchLogGroupName:
-    Description: The Name of Batch Log Group
-    Value      : !GetAtt BatchLogGroup.Outputs.LogGroupName
-  BatchLogGroupArn :
-    Description: The ARN of Batch Log Group
-    Value      : !GetAtt BatchLogGroup.Outputs.LogGroupArn

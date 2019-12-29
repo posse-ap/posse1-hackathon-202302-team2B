@@ -111,24 +111,22 @@ Resources:
   DBMasterInstance:
     Type      : AWS::RDS::DBInstance
     Properties:
-      AvailabilityZones          :
-        - ap-northeast-1a
-        - ap-northeast-1c
-      BackupRetentionPeriod      : !FindInMap [ RDS, !Ref Environment, BackupRetentionPeriod ]
-      DBInstanceClass            : !Ref DBMasterInstanceClass
-      DBParameterGroupName       : !Ref DBParameterGroup
-      DBSubnetGroupName          : !Ref DBSubnetGroup
-      DeletionProtection         : !FindInMap [ RDS, !Ref Environment, DeletionProtection ]
-      Engine                     : !Ref Engine
-      EngineVersion              : !Ref EngineVersion
-      MasterUsername             : !Ref MasterUsername
-      MasterUserPassword         : !Ref MasterUserPassword
-      MonitoringInterval         : 60
-      MonitoringRoleArn          : !Ref MonitoringRoleArn
-      Port                       : 3306
-      PubliclyAccessible         : false
-      StorageEncrypted           : true
-      VpcSecurityGroupIds        : !Ref RdsSecurityGroupIds
+      AllocatedStorage     : 20
+      AvailabilityZone     : ap-northeast-1a
+      BackupRetentionPeriod: !FindInMap [ RDS, !Ref Environment, BackupRetentionPeriod ]
+      DBInstanceClass      : !Ref DBMasterInstanceClass
+      DBParameterGroupName : !Ref DBParameterGroup
+      DBSubnetGroupName    : !Ref DBSubnetGroup
+      DeletionProtection   : !FindInMap [ RDS, !Ref Environment, DeletionProtection ]
+      Engine               : !Ref Engine
+      EngineVersion        : !Ref EngineVersion
+      MasterUsername       : !Ref MasterUsername
+      MasterUserPassword   : !Ref MasterUserPassword
+      MonitoringInterval   : 60
+      MonitoringRoleArn    : !Ref MonitoringRoleArn
+      Port                 : 3306
+      PubliclyAccessible   : false
+      VPCSecurityGroups    : !Ref RdsSecurityGroupIds
 Outputs:
   DBMasterInstanceEndpoint:
     Description: The Endpoint of the master DB

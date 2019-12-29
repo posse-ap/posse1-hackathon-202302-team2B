@@ -63,26 +63,6 @@ Resources:
         ServiceName          : Web
         RoleArn              : !GetAtt WebLogKinesisDataFirehoseRole.Outputs.LogKinesisDataFirehoseRoleArn
       TemplateURL: ./kinesis-data-firehose-delivery-stream.yml
-  BatchLogKinesisDataFirehoseRole:
-    Type      : AWS::CloudFormation::Stack
-    Properties:
-      Parameters:
-        Environment          : !Ref Environment
-        BucketArn            : !Ref BucketArn
-        FirehoseLogGroupName : !Sub "/aws/kinesisfirehose/${ProductName}-${Environment}-Batch"
-        FirehoseLogStreamName: S3Delivery
-      TemplateURL: ./kinesis-data-firehose-role.yml
-  BatchLogKinesisDataFirehoseDeliveryStream:
-    Type      : AWS::CloudFormation::Stack
-    Properties:
-      Parameters:
-        Environment          : !Ref Environment
-        BucketArn            : !Ref BucketArn
-        FirehoseLogGroupName : !Sub "/aws/kinesisfirehose/${ProductName}-${Environment}-Batch"
-        FirehoseLogStreamName: S3Delivery
-        ServiceName          : Batch
-        RoleArn              : !GetAtt BatchLogKinesisDataFirehoseRole.Outputs.LogKinesisDataFirehoseRoleArn
-      TemplateURL: ./kinesis-data-firehose-delivery-stream.yml
 Outputs:
   ApiLogKinesisDataFirehoseDeliveryStreamName:
     Description: The name of Api Log Kinesis Data Firehose Delivery Stream
@@ -96,9 +76,3 @@ Outputs:
   WebLogKinesisDataFirehoseDeliveryStreamArn:
     Description: The ARN of Web Log Kinesis Data Firehose Delivery Stream
     Value      : !GetAtt WebLogKinesisDataFirehoseDeliveryStream.Outputs.LogKinesisDataFirehoseDeliveryStreamArn
-  BatchLogKinesisDataFirehoseDeliveryStreamName:
-    Description: The name of Batch Log Kinesis Data Firehose Delivery Stream
-    Value      : !GetAtt BatchLogKinesisDataFirehoseDeliveryStream.Outputs.LogKinesisDataFirehoseDeliveryStreamName
-  BatchLogKinesisDataFirehoseDeliveryStreamArn:
-    Description: The ARN of Batch Log Kinesis Data Firehose Delivery Stream
-    Value      : !GetAtt BatchLogKinesisDataFirehoseDeliveryStream.Outputs.LogKinesisDataFirehoseDeliveryStreamArn

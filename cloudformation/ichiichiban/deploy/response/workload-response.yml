@@ -160,4 +160,75 @@ Resources:
       - Key: Name
         Value:
           Fn::Sub: IchiIchiban-${Environment}
-      TemplateURL: https://s3.ap-northeast-1.amazonaws.com/ichiichiban-cloudformation-template/19b7d7d75a8f332569235d3f5cc33aba.template
+      TemplateURL: https://s3.ap-northeast-1.amazonaws.com/ichiichiban-cloudformation-template/f969f38404afbf97fb69ad156556435b.template
+  Log:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        ProductName: IchiIchiban
+        Environment:
+          Ref: Environment
+        RetentionInDays:
+          Ref: LogGroupRetentionInDays
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Sub: IchiIchiban-${Environment}
+      TemplateURL: https://s3.ap-northeast-1.amazonaws.com/ichiichiban-cloudformation-template/f0591c29b0a988a2e93c9f3370b18185.template
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName:
+        Fn::Sub: IchiIchiban-${Environment}
+  Ec2AutoScaling:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        ProductName: IchiIchiban
+        Environment:
+          Ref: Environment
+        IamInstanceProfileRoles:
+          Fn::Join:
+          - ','
+          - - Fn::ImportValue: EC2ECSRoleName
+        DeviceName: /dev/xvda
+        VolumeSize: 30
+        VolumeType: gp2
+        ImageId: ami-0934e28fe3e390537
+        InstanceType:
+          Ref: Ec2InstanceType
+        KeyName:
+          Fn::FindInMap:
+          - Ec2AutoScaling
+          - Ref: Environment
+          - EC2KeyName
+        SecurityGroupIds:
+          Fn::Join:
+          - ','
+          - - Fn::GetAtt:
+              - SecurityGroups
+              - Outputs.EcsSecurityGroupId
+        UserDataContent:
+          Fn::Sub: '# Specified Cluster
+
+            echo ECS_CLUSTER="${ECSCluster}" >> /etc/ecs/ecs.config
+
+            '
+        MinSize:
+          Ref: Ec2AutoScalingGroupMinSize
+        MaxSize:
+          Ref: Ec2AutoScalingGroupMaxSize
+        DesiredCapacity:
+          Ref: Ec2AutoScalingGroupDesiredCapacity
+        PublicSubnetIds:
+          Fn::Join:
+          - ','
+          - - Fn::ImportValue:
+                Fn::Sub: IchiIchiban-${Environment}-PublicSubnetAId
+            - Fn::ImportValue:
+                Fn::Sub: IchiIchiban-${Environment}-PublicSubnetCId
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Sub: IchiIchiban-${Environment}
+      TemplateURL: https://s3.ap-northeast-1.amazonaws.com/ichiichiban-cloudformation-template/9177e00bf4c27226e621d7db32f8e036.template

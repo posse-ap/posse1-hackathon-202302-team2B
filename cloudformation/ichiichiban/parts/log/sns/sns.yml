@@ -19,6 +19,12 @@ Parameters:
     Type       : String
     Description: List of log group ARN
     MinLength  : 1
+Mappings:
+  SlackNotificationLambdaFunction:
+    Stg :
+      ApiUrl: https://hooks.slack.com/services/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
+    Prod:
+      ApiUrl: https://hooks.slack.com/services/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
 Resources:
   # ---------------------------------------------------------------#
   # Create Log SNS Topic
@@ -39,17 +45,25 @@ Resources:
       Parameters:
         ResourceArnList: !Ref LogGroupArnList
       TemplateURL: ./slack-notification-lambda/lambda-execution-role.yml
-  LogSlackNotificationLambda:
-    Type      : AWS::CloudFormation::Stack
+  LogSlackNotificationLambdaFunction:
+    Type      : AWS::Lambda::Function
     Properties:
-      Parameters:
-        Environment           : !Ref Environment
-        LambdaCode            : ./../log/sns/slack-notification-lambda/lambda-function
-        LambdaDescription     : !Sub "${ProductName}-${Environment} Log Slack Notification Lambda"
-        LambdaHandler         : realnetplus-log-slack-notification.lambda_handler
-        LambdaExecutionRoleArn: !GetAtt LogSlackNotificationLambdaExecutionRole.Outputs.LambdaExecutionRoleArn
-        TopicArn              : !GetAtt LogSnsTopic.Outputs.SnsTopicArn
-      TemplateURL: ./../../sns/slack-notification-lambda-function.yml
+      Code        : ./slack-notification-lambda/lambda-function
+      Description : !Sub "${ProductName}-${Environment} Log Slack Notification Lambda"
+      Environment :
+        Variables:
+          API_URL: !FindInMap [ SlackNotificationLambdaFunction, !Ref Environment, ApiUrl ]
+      Handler     : ichiichiban-log-slack-notification.lambda_handler
+      Role        : !GetAtt LogSlackNotificationLambdaExecutionRole.Outputs.LambdaExecutionRoleArn
+      Runtime     : python3.7
+      Timeout     : 60
+  LogSlackNotificationLambdaPermission:
+    Type      : AWS::Lambda::Permission
+    Properties:
+      Action      : lambda:InvokeFunction
+      FunctionName: !Ref LogSlackNotificationLambdaFunction
+      Principal   : sns.amazonaws.com
+      SourceArn   : !GetAtt LogSnsTopic.Outputs.SnsTopicArn
   # ---------------------------------------------------------------#
   # Create Log SNS Subscription
   # ---------------------------------------------------------------#
@@ -57,7 +71,7 @@ Resources:
     Type      : AWS::CloudFormation::Stack
     Properties:
       Parameters:
-        LambdaArn: !GetAtt LogSlackNotificationLambda.Outputs.LogSlackNotificationLambdaFunctionArn
+        LambdaArn: !GetAtt LogSlackNotificationLambdaFunction.Arn
         TopicArn : !GetAtt LogSnsTopic.Outputs.SnsTopicArn
       TemplateURL: ./../../sns/lambda-subscription.yml
 Outputs:
@@ -69,7 +83,7 @@ Outputs:
     Value      : !GetAtt LogSnsTopic.Outputs.SnsTopicName
   LogSlackNotificationLambdaFunctionName:
     Description: The name of log slack notification lambda
-    Value      : !GetAtt LogSlackNotificationLambda.Outputs.LogSlackNotificationLambdaFunctionName
+    Value      : !Ref LogSlackNotificationLambdaFunction
   LogSlackNotificationLambdaFunctionArn:
     Description: The ARN of log slack notification lambda
-    Value      : !GetAtt LogSlackNotificationLambda.Outputs.LogSlackNotificationLambdaFunctionArn
+    Value      : !GetAtt LogSlackNotificationLambdaFunction.Arn

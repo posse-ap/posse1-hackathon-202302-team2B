@@ -25,7 +25,7 @@ Parameters:
     MinLength  : 1
   ServiceName:
     Type       : String
-    Description: Service Name (Ex. Api, Web, Batch)
+    Description: Service Name (Ex. Api, Web)
     MinLength  : 1
   RoleArn:
     Type       : String

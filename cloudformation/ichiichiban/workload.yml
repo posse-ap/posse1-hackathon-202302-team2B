@@ -168,59 +168,58 @@ Resources:
   # ---------------------------------------------------------------#
   # Create CloudWatch Logs and alarm
   # ---------------------------------------------------------------#
-  # Log:
-  #   Type      : AWS::CloudFormation::Stack
-  #   Properties:
-  #     Parameters:
-  #       ProductName    : RealnetPlus
-  #       Environment    : !Ref Environment
-  #       RetentionInDays: !Ref LogGroupRetentionInDays
-  #     Tags:
-  #       - Key  : Name
-  #         Value: !Sub "RealnetPlus-${Environment}"
-  #     TemplateURL: ./parts/log/log.yml
+  Log:
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        ProductName    : IchiIchiban
+        Environment    : !Ref Environment
+        RetentionInDays: !Ref LogGroupRetentionInDays
+      Tags:
+        - Key  : Name
+          Value: !Sub "IchiIchiban-${Environment}"
+      TemplateURL: ./parts/log/log.yml
   # ---------------------------------------------------------------#
   # Create ECS Cluster
   # ---------------------------------------------------------------#
   # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-cluster.html
-  # ECSCluster:
-  #   Type      : AWS::ECS::Cluster
-  #   Properties:
-  #     ClusterName: !Sub "RealnetPlus-${Environment}"
+  ECSCluster:
+    Type      : AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Sub "IchiIchiban-${Environment}"
   # ---------------------------------------------------------------#
   # Create EC2 Auto Scaling
   # ---------------------------------------------------------------#
-  # Ec2AutoScaling:
-  #   Type      : AWS::CloudFormation::Stack
-  #   Properties:
-  #     Parameters:
-  #       ProductName            : RealnetPlus
-  #       Environment            : !Ref Environment
-  #       IamInstanceProfileRoles: !Join [ ",", [ !ImportValue EC2ECSRoleName ] ]
-  #       DeviceName             : /dev/xvda
-  #       VolumeSize             : 30
-  #       VolumeType             : gp2
-  #       ImageId                : ami-0934e28fe3e390537
-  #       InstanceType           : !Ref Ec2InstanceType
-  #       KeyName                : !FindInMap [ Ec2AutoScaling, !Ref Environment, EC2KeyName ]
-  #       SecurityGroupIds       : !Join [ ",", [ !GetAtt SecurityGroups.Outputs.EcsSecurityGroupId ] ]
-  #       UserDataContent        :
-  #         !Sub |
-  #           # Specified Cluster
-  #           echo ECS_CLUSTER="${ECSCluster}" >> /etc/ecs/ecs.config
-  #       MinSize               : !Ref Ec2AutoScalingGroupMinSize
-  #       MaxSize               : !Ref Ec2AutoScalingGroupMaxSize
-  #       DesiredCapacity       : !Ref Ec2AutoScalingGroupDesiredCapacity
-  #       PublicSubnetIds       :
-  #         !Join
-  #           - ","
-  #           - - Fn::ImportValue: !Sub "RealnetPlus-${Environment}-PublicSubnetAId"
-  #             - Fn::ImportValue: !Sub "RealnetPlus-${Environment}-PublicSubnetCId"
-  #       ClusterName            : !Ref ECSCluster
-  #     Tags:
-  #       - Key  : Name
-  #         Value: !Sub "RealnetPlus-${Environment}"
-  #     TemplateURL: ./parts/ec2-auto-scaling/ec2-auto-scaling.yml
+  Ec2AutoScaling:
+    Type      : AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        ProductName            : IchiIchiban
+        Environment            : !Ref Environment
+        IamInstanceProfileRoles: !Join [ ",", [ !ImportValue EC2ECSRoleName ] ]
+        DeviceName             : /dev/xvda
+        VolumeSize             : 30
+        VolumeType             : gp2
+        ImageId                : ami-0934e28fe3e390537
+        InstanceType           : !Ref Ec2InstanceType
+        KeyName                : !FindInMap [ Ec2AutoScaling, !Ref Environment, EC2KeyName ]
+        SecurityGroupIds       : !Join [ ",", [ !GetAtt SecurityGroups.Outputs.EcsSecurityGroupId ] ]
+        UserDataContent        :
+          !Sub |
+            # Specified Cluster
+            echo ECS_CLUSTER="${ECSCluster}" >> /etc/ecs/ecs.config
+        MinSize               : !Ref Ec2AutoScalingGroupMinSize
+        MaxSize               : !Ref Ec2AutoScalingGroupMaxSize
+        DesiredCapacity       : !Ref Ec2AutoScalingGroupDesiredCapacity
+        PublicSubnetIds       :
+          !Join
+            - ","
+            - - Fn::ImportValue: !Sub "IchiIchiban-${Environment}-PublicSubnetAId"
+              - Fn::ImportValue: !Sub "IchiIchiban-${Environment}-PublicSubnetCId"
+      Tags:
+        - Key  : Name
+          Value: !Sub "IchiIchiban-${Environment}"
+      TemplateURL: ./parts/ec2-auto-scaling/ec2-auto-scaling.yml
   # ---------------------------------------------------------------#
   # Create ECS Task Definition and Services (Web, Api)
   # ---------------------------------------------------------------#

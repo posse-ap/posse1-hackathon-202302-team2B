@@ -110,21 +110,7 @@ Parameters:
     Type       : List<AWS::EC2::Subnet::Id>
     Description: Public Subnet IDs
     MinLength  : 1
-  ClusterName:
-    Type       : String
-    Description: ECS Cluster Name
-    MinLength  : 1
 Resources:
-  # ---------------------------------------------------------------#
-  # Create EC2 Auto Scaling Group Notification Action (SNS Topic and Subscription)
-  # ---------------------------------------------------------------#
-  Ec2AutoScalingGroupSns:
-    Type      : AWS::CloudFormation::Stack
-    Properties:
-      Parameters:
-        ProductName    : !Ref ProductName
-        Environment    : !Ref Environment
-      TemplateURL: ./sns/sns.yml
   # ---------------------------------------------------------------#
   # Create EC2 Auto Scaling Group Launch Configuration
   # ---------------------------------------------------------------#
@@ -160,26 +146,8 @@ Resources:
         MinSize                : !Ref MinSize
         MaxSize                : !Ref MaxSize
         DesiredCapacity        : !Ref DesiredCapacity
-        TopicARN               : !GetAtt Ec2AutoScalingGroupSns.Outputs.Ec2AutoScalingGroupSnsTopicArn
-        PublicSubnetIds        : !Ref PublicSubnetIds
+        PublicSubnetIds        :
+          !Join
+            - ","
+            - !Ref PublicSubnetIds
       TemplateURL: ./ec2-auto-scaling-group.yml
-  # ---------------------------------------------------------------#
-  # Create EC2 Auto Scaling Group SNS Topic Policy
-  # ---------------------------------------------------------------#
-  Ec2AutoScalingGroupSnsTopicPolicy:
-    Type      : AWS::CloudFormation::Stack
-    Properties:
-      Parameters:
-        TopicArn              : !GetAtt Ec2AutoScalingGroupSns.Outputs.Ec2AutoScalingGroupSnsTopicArn
-        Ec2AutoScalingGroupArn: !Sub "arn:aws:autoscaling:region:${AWS::Region}:autoScalingGroup:${AWS::AccountId}:autoScalingGroupName/${Ec2AutoScalingGroup.Outputs.Ec2AutoScalingGroupName}"
-      TemplateURL: ./sns/topic-policy.yml
-  # ---------------------------------------------------------------#
-  # Create EC2 Auto Scaling Group Scaling Policy
-  # ---------------------------------------------------------------#
-  Ec2AutoScalingGroupScalingPolicy:
-    Type      : AWS::CloudFormation::Stack
-    Properties:
-      Parameters:
-        AutoScalingGroupName: !GetAtt Ec2AutoScalingGroup.Outputs.AutoScalingGroupName
-        ClusterName         : !Ref ClusterName
-      TemplateURL: ./scaling-policy.yml

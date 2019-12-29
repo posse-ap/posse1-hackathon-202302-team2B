@@ -27,10 +27,6 @@ Parameters:
     Type       : String
     Description: Web Metric Namespace
     MinLength  : 1
-  BatchMetricNamespace:
-    Type       : String
-    Description: Batch Metric Namespace
-    MinLength  : 1
 Resources:
   # ---------------------------------------------------------------#
   # Create Log Alarms
@@ -51,14 +47,6 @@ Resources:
         AlarmDescription: !Sub "${ProductName}-${Environment} Web Alarm"
         MetricNamespace : !Ref WebMetricNamespace
       TemplateURL: ./alarm.yml
-  BatchLogAlarm:
-    Type      : AWS::CloudFormation::Stack
-    Properties:
-      Parameters:
-        AlarmActionArn  : !Ref AlarmActionArn
-        AlarmDescription: !Sub "${ProductName}-${Environment} Batch Alarm"
-        MetricNamespace : !Ref BatchMetricNamespace
-      TemplateURL: ./alarm.yml
 Outputs:
   ApiLogAlarmErrorArn  :
     Description: The ARN of Api Log Alarm Error
@@ -78,12 +66,3 @@ Outputs:
   WebLogAlarmFatalArn  :
     Description: The ARN of Web Log Alarm Fatal
     Value      : !GetAtt WebLogAlarm.Outputs.LogAlarmFatalArn
-  BatchLogAlarmErrorArn:
-    Description: The ARN of Batch Log Alarm Error
-    Value      : !GetAtt BatchLogAlarm.Outputs.LogAlarmErrorArn
-  BatchLogAlarmWarnArn :
-    Description: The ARN of Batch Log Alarm Warn
-    Value      : !GetAtt BatchLogAlarm.Outputs.LogAlarmWarnArn
-  BatchLogAlarmFatalArn:
-    Description: The ARN of Batch Log Alarm Fatal
-    Value      : !GetAtt BatchLogAlarm.Outputs.LogAlarmFatalArn

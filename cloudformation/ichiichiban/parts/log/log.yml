@@ -28,10 +28,9 @@ Resources:
     Type      : AWS::CloudFormation::Stack
     Properties:
       Parameters:
-        ApiLogGroupName  : !Sub "${ProductName}-${Environment}-Api"
-        WebLogGroupName  : !Sub "${ProductName}-${Environment}-Web"
-        BatchLogGroupName: !Sub "${ProductName}-${Environment}-Batch"
-        RetentionInDays  : !Ref RetentionInDays
+        ApiLogGroupName: !Sub "${ProductName}-${Environment}-Api"
+        WebLogGroupName: !Sub "${ProductName}-${Environment}-Web"
+        RetentionInDays: !Ref RetentionInDays
       TemplateURL: ./log-group/log-groups.yml
   # ---------------------------------------------------------------#
   # Create Log Kinesis Data Firehoses
@@ -42,7 +41,7 @@ Resources:
       Parameters:
         ProductName: !Ref ProductName
         Environment: !Ref Environment
-        BucketArn  : arn:aws:s3:::log.realnet-plus
+        BucketArn  : arn:aws:s3:::log.ichiichiban
       TemplateURL: ./kinesis-data-firehose/kinesis-data-firehoses.yml
   # ---------------------------------------------------------------#
   # Create Log Subscription Filters
@@ -57,8 +56,6 @@ Resources:
         ApiLogGroupName    : !GetAtt LogGroups.Outputs.ApiLogGroupName
         WebDestinationArn  : !GetAtt LogKinesisDataFirehoses.Outputs.WebLogKinesisDataFirehoseDeliveryStreamArn
         WebLogGroupName    : !GetAtt LogGroups.Outputs.WebLogGroupName
-        BatchDestinationArn: !GetAtt LogKinesisDataFirehoses.Outputs.BatchLogKinesisDataFirehoseDeliveryStreamArn
-        BatchLogGroupName  : !GetAtt LogGroups.Outputs.BatchLogGroupName
       TemplateURL: ./log-subscription-filter/log-subscription-filters.yml
   # ---------------------------------------------------------------#
   # Create Log Metric Filters
@@ -67,12 +64,10 @@ Resources:
     Type      : AWS::CloudFormation::Stack
     Properties:
       Parameters:
-        ApiLogGroupName     : !GetAtt LogGroups.Outputs.ApiLogGroupName
-        ApiMetricNamespace  : !Sub "${ProductName}-${Environment}-Api"
-        WebLogGroupName     : !GetAtt LogGroups.Outputs.WebLogGroupName
-        WebMetricNamespace  : !Sub "${ProductName}-${Environment}-Web"
-        BatchLogGroupName   : !GetAtt LogGroups.Outputs.BatchLogGroupName
-        BatchMetricNamespace: !Sub "${ProductName}-${Environment}-Batch"
+        ApiLogGroupName   : !GetAtt LogGroups.Outputs.ApiLogGroupName
+        ApiMetricNamespace: !Sub "${ProductName}-${Environment}-Api"
+        WebLogGroupName   : !GetAtt LogGroups.Outputs.WebLogGroupName
+        WebMetricNamespace: !Sub "${ProductName}-${Environment}-Web"
       TemplateURL: ./log-metric-filter/log-metric-filters.yml
   # ---------------------------------------------------------------#
   # Create Log Alarm Actions (SNS Topic and Subscription)
@@ -88,7 +83,6 @@ Resources:
             - ","
             - - !GetAtt LogGroups.Outputs.ApiLogGroupArn
               - !GetAtt LogGroups.Outputs.WebLogGroupArn
-              - !GetAtt LogGroups.Outputs.BatchLogGroupArn
       TemplateURL: ./sns/sns.yml
   # ---------------------------------------------------------------#
   # Create Log Alarm
@@ -97,12 +91,11 @@ Resources:
     Type      : AWS::CloudFormation::Stack
     Properties:
       Parameters:
-        ProductName         : !Ref ProductName
-        Environment         : !Ref Environment
-        AlarmActionArn      : !GetAtt LogSns.Outputs.LogSnsTopicArn
-        ApiMetricNamespace  : !Sub "${ProductName}-${Environment}-Api"
-        WebMetricNamespace  : !Sub "${ProductName}-${Environment}-Web"
-        BatchMetricNamespace: !Sub "${ProductName}-${Environment}-Batch"
+        ProductName       : !Ref ProductName
+        Environment       : !Ref Environment
+        AlarmActionArn    : !GetAtt LogSns.Outputs.LogSnsTopicArn
+        ApiMetricNamespace: !Sub "${ProductName}-${Environment}-Api"
+        WebMetricNamespace: !Sub "${ProductName}-${Environment}-Web"
       TemplateURL: ./alarm/alarms.yml
   # ---------------------------------------------------------------#
   # Create Topic Policy
@@ -111,16 +104,13 @@ Resources:
     Type      : AWS::CloudFormation::Stack
     Properties:
       Parameters:
-        TopicArn             : !GetAtt LogSns.Outputs.LogSnsTopicArn
-        ApiLogAlarmErrorArn  : !GetAtt LogAlarms.Outputs.ApiLogAlarmErrorArn
-        ApiLogAlarmWarnArn   : !GetAtt LogAlarms.Outputs.ApiLogAlarmWarnArn
-        ApiLogAlarmFatalArn  : !GetAtt LogAlarms.Outputs.ApiLogAlarmFatalArn
-        WebLogAlarmErrorArn  : !GetAtt LogAlarms.Outputs.WebLogAlarmErrorArn
-        WebLogAlarmWarnArn   : !GetAtt LogAlarms.Outputs.WebLogAlarmWarnArn
-        WebLogAlarmFatalArn  : !GetAtt LogAlarms.Outputs.WebLogAlarmFatalArn
-        BatchLogAlarmErrorArn: !GetAtt LogAlarms.Outputs.BatchLogAlarmErrorArn
-        BatchLogAlarmWarnArn : !GetAtt LogAlarms.Outputs.BatchLogAlarmWarnArn
-        BatchLogAlarmFatalArn: !GetAtt LogAlarms.Outputs.BatchLogAlarmFatalArn
+        TopicArn           : !GetAtt LogSns.Outputs.LogSnsTopicArn
+        ApiLogAlarmErrorArn: !GetAtt LogAlarms.Outputs.ApiLogAlarmErrorArn
+        ApiLogAlarmWarnArn : !GetAtt LogAlarms.Outputs.ApiLogAlarmWarnArn
+        ApiLogAlarmFatalArn: !GetAtt LogAlarms.Outputs.ApiLogAlarmFatalArn
+        WebLogAlarmErrorArn: !GetAtt LogAlarms.Outputs.WebLogAlarmErrorArn
+        WebLogAlarmWarnArn : !GetAtt LogAlarms.Outputs.WebLogAlarmWarnArn
+        WebLogAlarmFatalArn: !GetAtt LogAlarms.Outputs.WebLogAlarmFatalArn
       TemplateURL: ./sns/topic-policy.yml
 Outputs:
   ApiLogGroupName:
@@ -135,9 +125,3 @@ Outputs:
   WebLogGroupArn:
     Description: The ARN of Web log group
     Value      : !GetAtt LogGroups.Outputs.WebLogGroupArn
-  BatchLogGroupName:
-    Description: The name of Batch log group
-    Value      : !GetAtt LogGroups.Outputs.BatchLogGroupName
-  BatchLogGroupArn:
-    Description: The ARN of Batch log group
-    Value      : !GetAtt LogGroups.Outputs.BatchLogGroupArn

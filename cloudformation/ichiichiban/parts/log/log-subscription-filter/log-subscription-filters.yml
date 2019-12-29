@@ -31,14 +31,6 @@ Parameters:
     Type       : String
     Description: Log Group Web Name
     MinLength  : 1
-  BatchDestinationArn:
-    Type       : String
-    Description: The ARN of Batch Destination
-    MinLength  : 1
-  BatchLogGroupName:
-    Type       : String
-    Description: Log Group Batch Name
-    MinLength  : 1
 Resources:
   # ---------------------------------------------------------------#
   # Create Log Subscription Filters
@@ -76,21 +68,4 @@ Resources:
         DestinationArn: !Ref WebDestinationArn
         LogGroupName  : !Ref WebLogGroupName
         RoleArn       : !GetAtt WebLogSubscriptionFilterRole.Outputs.LogSubscriptionFilterRoleArn
-      TemplateURL: ./log-subscription-filter.yml
-  BatchLogSubscriptionFilterRole:
-    Type      : AWS::CloudFormation::Stack
-    Properties:
-      Parameters:
-        ProductName      : !Ref ProductName
-        Environment      : !Ref Environment
-        DeliveryStreamArn: !Ref BatchDestinationArn
-        RoleName         : !Sub "${ProductName}-${Environment}-Batch-LogSubscriptionFilterRole"
-      TemplateURL: ./log-subscription-filter-role.yml
-  BatchLogSubscriptionFilter:
-    Type      : AWS::CloudFormation::Stack
-    Properties:
-      Parameters:
-        DestinationArn: !Ref BatchDestinationArn
-        LogGroupName  : !Ref BatchLogGroupName
-        RoleArn       : !GetAtt BatchLogSubscriptionFilterRole.Outputs.LogSubscriptionFilterRoleArn
       TemplateURL: ./log-subscription-filter.yml

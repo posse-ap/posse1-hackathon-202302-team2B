@@ -34,10 +34,6 @@ Parameters:
     Default    : 1
     Description: Number of instances to launch in your ECS cluster.
     MinValue   : 1
-  TopicARN:
-    Type       : String
-    Description: SNS Topic ARN
-    MinLength  : 1
   PublicSubnetIds:
     Type       : List<AWS::EC2::Subnet::Id>
     Description: Public Subnet IDs
@@ -58,19 +54,6 @@ Resources:
       MinSize                   : !Ref MinSize
       MaxSize                   : !Ref MaxSize
       DesiredCapacity           : !Ref DesiredCapacity
-      MetricsCollection         :
-        - Granularity: 1Minute
-          Metrics    :
-            - GroupInServiceInstances
-            - GroupTotalInstances
-      NotificationConfigurations:
-        - NotificationTypes:
-            - autoscaling:EC2_INSTANCE_LAUNCH
-            - autoscaling:EC2_INSTANCE_LAUNCH_ERROR
-            - autoscaling:EC2_INSTANCE_TERMINATE
-            - autoscaling:EC2_INSTANCE_TERMINATE_ERROR
-            - autoscaling:TEST_NOTIFICATION
-          TopicARN         : !Ref TopicARN
       VPCZoneIdentifier         : !Ref PublicSubnetIds
     CreationPolicy:
       ResourceSignal:

@@ -31,18 +31,6 @@ Parameters:
     Type       : String
     Description: The ARN of API log alarm Fatal
     MinLength  : 1
-  BatchLogAlarmErrorArn:
-    Type       : String
-    Description: The ARN of API log alarm Error
-    MinLength  : 1
-  BatchLogAlarmWarnArn:
-    Type       : String
-    Description: The ARN of API log alarm Warn
-    MinLength  : 1
-  BatchLogAlarmFatalArn:
-    Type       : String
-    Description: The ARN of API log alarm Fatal
-    MinLength  : 1
 Resources:
   # ---------------------------------------------------------------#
   # Create SNS Topic Policy
@@ -64,14 +52,11 @@ Resources:
               StringEquals:
                 "AWS:SourceOwner": !Ref "AWS::AccountId"
               ArnLike     :
-                "AWS:SourceArn"  : !Ref ApiLogAlarmErrorArn
-                "AWS:SourceArn"  : !Ref ApiLogAlarmWarnArn
-                "AWS:SourceArn"  : !Ref ApiLogAlarmFatalArn
-                "AWS:SourceArn"  : !Ref WebLogAlarmErrorArn
-                "AWS:SourceArn"  : !Ref WebLogAlarmWarnArn
-                "AWS:SourceArn"  : !Ref WebLogAlarmFatalArn
-                "AWS:SourceArn"  : !Ref BatchLogAlarmErrorArn
-                "AWS:SourceArn"  : !Ref BatchLogAlarmWarnArn
-                "AWS:SourceArn"  : !Ref BatchLogAlarmFatalArn
+                "AWS:SourceArn" : !Ref ApiLogAlarmErrorArn
+                "AWS:SourceArn" : !Ref ApiLogAlarmWarnArn
+                "AWS:SourceArn" : !Ref ApiLogAlarmFatalArn
+                "AWS:SourceArn" : !Ref WebLogAlarmErrorArn
+                "AWS:SourceArn" : !Ref WebLogAlarmWarnArn
+                "AWS:SourceArn" : !Ref WebLogAlarmFatalArn
       Topics        :
         - !Ref TopicArn
