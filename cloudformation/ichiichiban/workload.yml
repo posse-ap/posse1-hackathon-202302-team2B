@@ -238,8 +238,6 @@ Resources:
   #       TaskRoleArn        : !ImportValue TaskExecutionRoleArn
   #       ECSCluster         : !Ref ECSCluster
   #       WebDesiredCount    : !Ref WebDesiredCount
-  #       TargetGroupArn     : !GetAtt WebALB.Outputs.TargetGroupArn
-  #       ECSAutoScaleRoleArn: !ImportValue ECSAutoScaleRoleArn
   #     Tags:
   #       - Key  : Name
   #         Value: !Sub "RealnetPlus-${Environment}"
@@ -259,8 +257,6 @@ Resources:
   #       TaskRoleArn        : !ImportValue TaskExecutionRoleArn
   #       ECSCluster         : !Ref ECSCluster
   #       ApiDesiredCount    : !Ref ApiDesiredCount
-  #       TargetGroupArn     : !GetAtt ApiALB.Outputs.TargetGroupArn
-  #       ECSAutoScaleRoleArn: !ImportValue ECSAutoScaleRoleArn
   #     Tags:
   #       - Key  : Name
   #         Value: !Sub "RealnetPlus-${Environment}"

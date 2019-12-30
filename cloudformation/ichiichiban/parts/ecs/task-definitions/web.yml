@@ -62,7 +62,7 @@ Resources:
           Name            : !Ref WebContainerName
           PortMappings    :
             - ContainerPort: !Ref WebContainerPort
-              HostPort     :
+              HostPort     : !Ref WebContainerPort
       ExecutionRoleArn    : !Ref ExecutionRoleArn
       Family              : !Sub "${ProductName}-${Environment}-Web"
       TaskRoleArn         : !Ref TaskRoleArn

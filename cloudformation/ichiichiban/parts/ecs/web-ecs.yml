@@ -43,20 +43,12 @@ Parameters:
     Type       : Number
     Description: Desired Count of Web Task
     MinValue   : 1
-  TargetGroupArn:
-    Type       : String
-    Description: Target Group ARN
-    MinLength  : 1
-  ECSAutoScaleRoleArn:
-    Type       : String
-    Description: ECS Auto Scale Role ARN
-    MinLength  : 1
 Mappings:
   WebEcs:
     Stg :
-      Image:
+      Image: 196611962182.dkr.ecr.ap-northeast-1.amazonaws.com/stg-ichiichiban-web
     Prod:
-      Image:
+      Image: 196611962182.dkr.ecr.ap-northeast-1.amazonaws.com/prod-ichiichiban-web
 Resources:
   # ---------------------------------------------------------------#
   # Create Web Task Definition
@@ -86,27 +78,5 @@ Resources:
       Cluster       : !Ref ECSCluster
       DesiredCount  : !Ref WebDesiredCount
       LaunchType    : EC2
-      LoadBalancers :
-        - ContainerName : Web
-          ContainerPort : 80
-          TargetGroupArn: !Ref TargetGroupArn
       ServiceName   : !Sub "${ProductName}-${Environment}-Web"
       TaskDefinition: !GetAtt WebTaskDefinition.Outputs.WebTaskDefinitionArn
-  # ---------------------------------------------------------------#
-  # Create Web Service Auto Scaling
-  # ---------------------------------------------------------------#
-  ECSWebServiceAutoScaling:
-    Type      : AWS::CloudFormation::Stack
-    Properties:
-      Parameters:
-        WebTaskMaxCapacity : 40 # 4GiB(4096MiB) / 512MiB(Webコンテナのメモリ) * 5台 = 40
-        WebTaskMinCapacity : 2
-        ECSCluster         : !Ref ECSCluster
-        ECSWebServiceName  : !GetAtt ECSWebService.Name
-        ECSAutoScaleRoleArn: !Ref ECSAutoScaleRoleArn
-        CPUTargetValue     : 70
-        MemoryTargetValue  : 70
-      Tags:
-        - Key  : Name
-          Value: !Sub "RealnetPlus-${Environment}"
-      TemplateURL: ./ecs-auto-scaling/web-service-auto-scaling.yml

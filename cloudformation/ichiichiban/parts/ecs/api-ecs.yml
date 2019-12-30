@@ -43,20 +43,12 @@ Parameters:
     Type       : Number
     Description: Desired Count of Api Task
     MinValue   : 1
-  TargetGroupArn:
-    Type       : String
-    Description: Target Group ARN
-    MinLength  : 1
-  ECSAutoScaleRoleArn:
-    Type       : String
-    Description: ECS Auto Scale Role ARN
-    MinLength  : 1
 Mappings:
   ApiEcs:
     Stg :
-      Image: 906318407081.dkr.ecr.ap-northeast-1.amazonaws.com/realnetplus-stg-api:latest
+      Image:
     Prod:
-      Image: 906318407081.dkr.ecr.ap-northeast-1.amazonaws.com/realnetplus-prod-api:latest
+      Image:
 Resources:
   # ---------------------------------------------------------------#
   # Create Api Task Definition
@@ -74,7 +66,7 @@ Resources:
         ExecutionRoleArn: !Ref ExecutionRoleArn
         TaskRoleArn     : !Ref TaskRoleArn
         ApiContainerName: Api
-        ApiContainerPort: 8080
+        ApiContainerPort: 9000
       TemplateURL: ./task-definitions/api.yml
   # ---------------------------------------------------------------#
   # Create API Service
@@ -86,27 +78,5 @@ Resources:
       Cluster       : !Ref ECSCluster
       DesiredCount  : !Ref ApiDesiredCount
       LaunchType    : EC2
-      LoadBalancers :
-        - ContainerName : Api
-          ContainerPort : 8080
-          TargetGroupArn: !Ref TargetGroupArn
       ServiceName   : !Sub "${ProductName}-${Environment}-Api"
       TaskDefinition: !GetAtt ApiTaskDefinition.Outputs.ApiTaskDefinitionArn
-  # ---------------------------------------------------------------#
-  # Create API Service Auto Scaling
-  # ---------------------------------------------------------------#
-  ECSApiServiceAutoScaling:
-    Type      : AWS::CloudFormation::Stack
-    Properties:
-      Parameters:
-        ApiTaskMaxCapacity : 20 # 4GiB(4096MiB) / 1024MiB(Apiコンテナのメモリ) * 5台 = 20
-        ApiTaskMinCapacity : 2
-        ECSCluster         : !Ref ECSCluster
-        ECSApiServiceName  : !GetAtt ECSApiService.Name
-        ECSAutoScaleRoleArn: !Ref ECSAutoScaleRoleArn
-        CPUTargetValue     : 70
-        MemoryTargetValue  : 70
-      Tags:
-        - Key  : Name
-          Value: !Sub "RealnetPlus-${Environment}"
-      TemplateURL: ./ecs-auto-scaling/api-service-auto-scaling.yml

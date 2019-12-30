@@ -62,7 +62,7 @@ Resources:
           Name            : !Ref ApiContainerName
           PortMappings    :
             - ContainerPort: !Ref ApiContainerPort
-              HostPort     : 0
+              HostPort     : !Ref ApiContainerPort
       ExecutionRoleArn    : !Ref ExecutionRoleArn
       Family              : !Sub "${ProductName}-${Environment}-Api"
       TaskRoleArn         : !Ref TaskRoleArn
