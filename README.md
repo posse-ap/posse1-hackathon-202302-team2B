@@ -18,4 +18,8 @@
 
 8. `php artisan migrate:refresh --seed`
 
-9. Please try to access `http://localhost:80`
+9. `npm install`
+
+10. `npm run dev`
+
+11. Please try to access `http://localhost:80`
