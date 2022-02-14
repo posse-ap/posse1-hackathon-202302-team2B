@@ -25,7 +25,7 @@
                             <div class="card mb-4 box-shadow">
                                 <img
                                         class="card-img-top btn fly"
-                                        src="https://ichiichiban.s3-ap-northeast-1.amazonaws.com/products/{{ $product->thumbnail }}"
+                                        src="{{ asset('img/' . $product->thumbnail) }}"
                                         alt="tomato"
                                         style="height: 225px; width: 100%; display: block;"
                                         data-toggle="modal"
@@ -68,7 +68,7 @@
                     <div class="modal-content">
                         <div class="modal-body">
                             <img
-                                    src="https://ichiichiban.s3-ap-northeast-1.amazonaws.com/products/{{ $product->image1 }}"
+                                    src="{{ asset('img/' . $product->image1) }}"
                                     alt="tomato"
                                     style=" width: 100%;"
                                     class="aligncenter size-full wp-image-425"/>

@@ -94,7 +94,7 @@
 
                     <div class="row justify-content-sm-center mb-2">
                         <div class="col-4"><img
-                                    src="https://ichiichiban.s3-ap-northeast-1.amazonaws.com/products/{{ $cart->get('thumbnail') }}"
+                                    src="{{ asset('img/' . $cart->get('thumbnail')) }}"
                                     style="height: 150px; width: 100%; display: block;" alt="tomato"></div>
                         <div class="col-5">{{ $cart->get('name') }}</div>
                         <div class="col-3 text-right">{{ $cart->get('quantity') }}個</div>
