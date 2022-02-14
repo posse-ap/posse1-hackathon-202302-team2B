@@ -4,6 +4,8 @@
 
 2. `cd hackathon-202202-sample`
 
+3. `cp ./src/.env.dev ./src/.env`
+
 3. `docker-compose build --pull`
 
 4. `docker-compose up -d`
