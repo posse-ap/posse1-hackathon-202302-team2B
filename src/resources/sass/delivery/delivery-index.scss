@@ -1,0 +1,39 @@
+.delivery-index {
+    .block {
+        padding: 0 20px 20px;
+        margin-bottom: 40px;
+        background-color: $gray-100;
+        border: 1px solid $gray-200;
+        border-radius: 3px;
+    }
+
+    .order-head {
+        margin: 20px 0;
+    }
+
+    i.material-icons.track {
+        position: absolute;
+        right: 15px;
+        font-size: 45px;
+    }
+
+    .allNoDisplay li {
+        display: none;
+    }
+
+    .today_am li[today_am] {
+        display: block;
+    }
+
+    .today_pm li[today_pm] {
+        display: block;
+    }
+
+    .tomorrow_am li[tomorrow_am] {
+        display: block;
+    }
+
+    .tomorrow_pm li[tomorrow_pm] {
+        display: block;
+    }
+}

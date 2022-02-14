@@ -12,7 +12,7 @@ services:
     ports         :
       - 80:80
     volumes       :
-      - ../ichiichiban:/var/www/ichiichiban:cached
+      - ./src:/var/www/ichiichiban:cached
   php:
     build         :
       context: ./phpfpm
@@ -20,7 +20,7 @@ services:
     hostname      : ichiichiban-php
     container_name: ichiichiban-php
     volumes       :
-      - ../ichiichiban:/var/www/ichiichiban:cached
+      - ./src:/var/www/ichiichiban:cached
   mysql:
     #restart: always
     build         :
