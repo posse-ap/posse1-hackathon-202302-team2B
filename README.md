@@ -10,7 +10,7 @@
 
 4. `docker-compose up -d`
 
-5. `docker-compose exec ichiichiban-php bash`
+5. `docker-compose exec php bash`
 
 6. `cd ichiichiban`
 
