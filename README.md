@@ -16,6 +16,6 @@
 
 7. `composer install`
 
-7. `php artisan mmigrate:refresh --seed`
+8. `php artisan migrate:refresh --seed`
 
-8. Please try to access `http://localhost:80`
+9. Please try to access `http://localhost:80`
