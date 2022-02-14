@@ -24,8 +24,9 @@
 
 11. Please try to access `http://localhost:80`
 
+```
 ※CSSについて
  src/resources/sassにSASSファイルが入っています
  修正した場合は`npm run dev`を再実行することで
- 変更内容がsrc/public/css/app.css に出力され、画面に反映されます
- 
+ src/public/css/app.css に出力され、画面に反映されます
+``` 
