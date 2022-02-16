@@ -30,7 +30,7 @@
                 <div class="row justify-content-sm-center my-1">
                     <div class="col-4">
                         <img
-                            src="https://ichiichiban.s3-ap-northeast-1.amazonaws.com/products/{{ $cart->get('thumbnail') }}"
+                            src="{{ asset('img/' . $cart->get('thumbnail')) }}"
                             style="height: 150px; width: 100%; display: block;"
                             alt="{{ $cart->get('name') }}"></div>
                     <div class="col-3">{{ $cart->get('name') }}</div>

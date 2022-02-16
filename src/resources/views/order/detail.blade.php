@@ -71,7 +71,7 @@
                             <tr>
                                 <td>
                                     <img
-                                        src="https://ichiichiban.s3-ap-northeast-1.amazonaws.com/products/{{ $order_detail->product->thumbnail }}"
+                                        src="{{ asset('img/' . $order_detail->product->thumbnail) }}"
                                         style="height: 150px; width: 150px; display: block;"
                                         alt="{{ $order_detail->product->name }}">
                                 </td>

@@ -92,7 +92,7 @@
                 <div class="row justify-content-sm-center mb-2">
                     @foreach ($order->order_details as $order_detail)
                     <div class="col-4"><img
-                                src="https://ichiichiban.s3-ap-northeast-1.amazonaws.com/products/{{ $order_detail->product->thumbnail }}"
+                                src="{{ asset('img/' . $order_detail->product->thumbnail) }}"
                                 style="height: 150px; width: 100%; display: block;"
                                 alt="tomato"></div>
                     <div class="col-5">{{ $order_detail->product->name }}</div>
