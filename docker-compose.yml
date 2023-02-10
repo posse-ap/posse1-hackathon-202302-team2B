@@ -25,6 +25,7 @@ services:
     #restart: always
     build         :
       context: ./mysql
+    platform: linux/amd64
     image         : ichiichiban-db
     hostname      : ichiichiban-db
     container_name: ichiichiban-db
