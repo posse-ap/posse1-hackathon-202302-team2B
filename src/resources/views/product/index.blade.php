@@ -38,11 +38,13 @@
                                         <small class="text-muted">{{ $product->format_price }}</small>
                                     </div>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <div class="input-group col-sm-5">
-                                            <input type="text" class="form-control quantity"
-                                                   aria-label="Dollar amount (with dot and two decimal places)">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">個</span>
+                                        <div class="col-sm-5">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control quantity"
+                                                       aria-label="Dollar amount (with dot and two decimal places)">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">個</span>
+                                                </div>
                                             </div>
                                         </div>
                                         <button type="button" class="btn col-sm-5 btn-sm btn-outline-danger"
