@@ -28,9 +28,9 @@
                                         src="{{ asset('img/' . $product->thumbnail) }}"
                                         alt="tomato"
                                         style="height: 225px; width: 100%; display: block;"
-                                        data-toggle="modal"
-                                        data-target="#productModal{{ $product->id }}"
-                                        data-whatever="productTomato"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#productModal{{ $product->id }}"
+                                        data-bs-whatever="productTomato"
                                 >
                                 <div class="card-body">
                                     <p class="card-text">{{ $product->name }}</p>
@@ -42,9 +42,7 @@
                                             <div class="input-group">
                                                 <input type="text" class="form-control quantity"
                                                        aria-label="Dollar amount (with dot and two decimal places)">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text">個</span>
-                                                </div>
+                                                <span class="input-group-text">個</span>
                                             </div>
                                         </div>
                                         <button type="button" class="btn col-sm-5 btn-sm btn-outline-danger"
@@ -77,22 +75,20 @@
                         </div>
                         <form>
                             <div class="container-fluid">
-                                <div class="row mb-2">
+                                <div class="row mb-2 justify-content-between">
                                     <div class="col-md-4">{{ $product->description }}</div>
-                                    <div class="col-md-4 ml-auto text-right">{{ $product->quantity }}</div>
+                                    <div class="col-md-4 ml-auto text-end">{{ $product->quantity }}</div>
                                 </div>
-                                <div class="row mb-2">
+                                <div class="row mb-2 col-md-4 ms-auto">
                                     <div class="input-group">
-                                        <input type="text" class="form-control col-md-4 quantityfromdetail"
+                                        <input type="text" class="form-control quantityfromdetail"
                                                aria-label="Dollar amount (with dot and two decimal places)">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">個</span>
-                                        </div>
+										<span class="input-group-text">個</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-ash" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-ash" data-bs-dismiss="modal">Close</button>
                                 <button type="button" class="btn btn-danger"
                                         onclick="ToCartFromDetail({{ $product->id }}, {{ $loop->index }});">カートに追加
                                 </button>
