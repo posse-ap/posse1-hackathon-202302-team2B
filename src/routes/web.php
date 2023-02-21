@@ -11,6 +11,7 @@
 |
 */
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\DeliveryListController;
@@ -26,14 +27,15 @@ Route::middleware([])->group(function () {
             Route::post('/', 'register')->name('register.post');
         });
 
-        // ログイン
-        Route::prefix('login')->group(function () {
-            Route::get('/',  'LoginController@showLoginForm')->name('login');
-            Route::post('/', 'LoginController@login')->name('login.post');
+        Route::controller(LoginController::class)->group(function () {
+            // ログイン
+            Route::prefix('login')->group(function () {
+                Route::get('/',  'showLoginForm')->name('login');
+                Route::post('/', 'login')->name('login.post');
+            });
+            // ログアウト
+            Route::get('/logout', 'logout')->name('logout');
         });
-
-        // ログアウト
-        Route::get('/logout', 'LoginController@logout')->name('logout');
     });
 
     // 製品
@@ -54,28 +56,28 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:user'])->group(function () {
         // 配送先
         Route::controller(DeliveryAddressController::class)->prefix('delivery-address')->group(function () {
-            Route::get('/',       'index')->name('delivery-address');
+            Route::get('/', 'index')->name('delivery-address');
             Route::get('/create', 'showCreateForm')->name('delivery-address.showCreateForm');
             Route::post('/create', 'create')->name('delivery-address.create');
         });
 
         // 配送時間
-        Route::post('/delivery-time', 'DeliveryTimeController@index')->name('delivery-time');
+        Route::post('/delivery-time', [DeliveryTimeController::class, 'index'])->name('delivery-time');
 
         // 注文
         Route::controller(OrderController::class)->prefix('order')->group(function () {
-            Route::get('/',         'index')->name('order');
-            Route::get('/thanks',   'thanks')->name('order.thanks');
-            Route::get('/{id}',     'detail')->name('order.detail');
+            Route::get('/', 'index')->name('order');
+            Route::get('/thanks', 'thanks')->name('order.thanks');
+            Route::get('/{id}', 'detail')->name('order.detail');
             Route::post('/confirm', 'confirm')->name('order.confirm');
-            Route::post('/cancel',  'cancel')->name('order.cancel');
+            Route::post('/cancel', 'cancel')->name('order.cancel');
         });
     });
 
     // 配送業者・管理者
     Route::middleware(['role:delivery-agent'])->group(function () {
         Route::prefix('delivery-list')->group(function () {
-            Route::get('/',     [DeliveryListController::class, 'index'])->name('delivery-list');
+            Route::get('/', [DeliveryListController::class, 'index'])->name('delivery-list');
             Route::get('/{id}', [DeliveryListDetailController::class, 'detail'])->name('delivery-list.detail');
         });
     });
