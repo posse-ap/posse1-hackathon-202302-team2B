@@ -15,6 +15,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\DeliveryListController;
+use App\Http\Controllers\DeliveryTimeController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Route;
 

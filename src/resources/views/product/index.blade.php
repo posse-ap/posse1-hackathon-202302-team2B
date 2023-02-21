@@ -28,9 +28,9 @@
                                         src="{{ asset('img/' . $product->thumbnail) }}"
                                         alt="tomato"
                                         style="height: 225px; width: 100%; display: block;"
-                                        data-toggle="modal"
-                                        data-target="#productModal{{ $product->id }}"
-                                        data-whatever="productTomato"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#productModal{{ $product->id }}"
+                                        data-bs-whatever="productTomato"
                                 >
                                 <div class="card-body">
                                     <p class="card-text">{{ $product->name }}</p>
