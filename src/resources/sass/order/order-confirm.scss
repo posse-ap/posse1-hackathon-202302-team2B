@@ -1,0 +1,14 @@
+.order-confirm {
+    .block {
+        padding: 0 20px 20px;
+        margin-bottom: 40px;
+        background-color: $gray-100;
+        border: 1px solid $gray-200;
+        border-radius: 3px;
+
+        .title {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+    }
+}
