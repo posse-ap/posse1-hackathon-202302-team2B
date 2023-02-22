@@ -68,7 +68,7 @@ class Order extends Model
 
     public function isReturnable()
     {
-        return $this->delivery_status_id == DeliveryStatus::getDeliveredId() && Carbon::now()->diffInDays(new Carbon($this->delivery_date)) <= self::RETURN_LIMIT;
+        return $this->delivery_status_id == DeliveryStatus::getDeliveredId() && Carbon::now()->diffInHours(new Carbon($this->delivery_date)) <= self::RETURN_LIMIT;
     }
 
     public static function getDeliveryDateWhen(Carbon $delivery_date)
