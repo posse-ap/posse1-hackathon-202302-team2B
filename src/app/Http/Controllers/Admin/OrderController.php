@@ -80,7 +80,7 @@ class OrderController extends Controller
         $delivery_status_id = $request->input('delivery_status_id');
 
         $order->delivery_status_id = $delivery_status_id;
-        
+
         $order->save();
 
         return redirect()

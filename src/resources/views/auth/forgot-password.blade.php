@@ -8,7 +8,7 @@
             <div class="card-header h5 text-white bg-primary">Password Reset</div>
             <div class="card-body px-5">
                 <div class="form-outline">
-                    <input type="email" name="name" id="typeEmail" class="form-control my-3" />
+                    <input type="email" name="email" id="typeEmail" class="form-control my-3" />
                     <label class="form-label" for="typeEmail">Email input</label>
                 </div>
                 <div class="d-flex justify-content-between mt-4">
