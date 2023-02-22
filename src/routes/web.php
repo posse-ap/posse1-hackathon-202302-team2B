@@ -45,6 +45,19 @@ Route::middleware([])->group(function () {
             // ログアウト
             Route::get('/logout', 'logout')->name('logout');
         });
+
+        //forgot password
+        Route::get('/forgot-password', function () {
+            return view('auth.forgot-password');
+        })->middleware('guest')->name('password.request');
+
+        Route::post('/forgot-password', [LoginController::class, 'resetPassword'])->middleware('guest')->name('password.email');
+
+        Route::get('/reset-password/{token}', function ($token) {
+            return view('auth.reset-password', ['token' => $token]);
+        })->middleware('guest')->name('password.reset');
+
+        Route::post('/reset-password', [LoginController::class, 'resetPassword'])->middleware('guest')->name('password.update');
     });
 
     // 製品
@@ -100,7 +113,7 @@ Route::middleware(['auth'])->group(function () {
             // 購入履歴
             Route::resource('orders', Admin\OrderController::class);
             Route::post('orders/sort', [Admin\OrderScopeController::class, 'scope'])->name('orders.scope');
-            
+
             // 商品情報
             Route::get('product', [ProductController::class, 'index'])->name('product.index');
             Route::get('product/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
