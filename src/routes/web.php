@@ -68,6 +68,7 @@ Route::middleware([])->group(function () {
     // カート
     Route::controller(CartController::class)->prefix('cart')->group(function () {
         Route::get('/', 'index')->name('cart');
+        Route::get('/{product_id}', 'delete')->name('cart.delete');
         Route::get('/{productid}/{quantity?}', 'add');
         Route::get('/flush', 'flush');
     });

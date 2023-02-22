@@ -110,7 +110,13 @@ class OrderController extends Controller
     {
         $delivery = session('delivery');
 
-        $total_price = session('total_value') * (1 - self::SCHEDULED_DISCOUNT_RATE);
+        $is_scheduled = $delivery->get('is_scheduled');
+
+        if ($is_scheduled) {
+            $total_price = session('total_value') * (1 - self::SCHEDULED_DISCOUNT_RATE);
+        } else {
+            $total_price = session('total_value');
+        }
 
         $order = Order::create([
             'user_id'               => Auth::id(),
@@ -120,7 +126,7 @@ class OrderController extends Controller
             'delivery_method_id'    => $delivery->get('delivery_method'),
             'delivery_status_id'    => DeliveryStatus::getInPreparationId(),
             'total_price'           => $total_price,
-            'is_scheduled' => $delivery->get('is_scheduled'),
+            'is_scheduled' => $is_scheduled,
             'delivery_span' => $delivery->get('delivery_span'),
         ]);
 
