@@ -14,12 +14,12 @@
 </nav>
 <table class="table table-striped">
   <tr>
-    <th>name</th>
-    <th>description</th>
-    <th>image1</th>
-    <th>quantity</th>
-    <th>discount_rate</th>
-    <th>price</th>
+    <th>商品名</th>
+    <th>商品説明</th>
+    <th>写真</th>
+    <th>1箱当たりの量</th>
+    <th>割引率</th>
+    <th>料金</th>
     <th>販売状況</th>
     <th>編集</th>
     <th>削除</th>
