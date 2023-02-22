@@ -15,7 +15,7 @@
     </div>
     <div class="mb-3">
       <label for="compary_name" class="form-label" required>company_name</label>
-      <input name="company_name" type="company_name" class="form-control" id="name">
+      <input name="company_name" type="company_name" class="form-control" id="company_name">
     </div>
     <div class="mb-3">
       <label for="Password" class="form-label">Password</label>
@@ -29,6 +29,6 @@
     <label class="form-check-label" for="exampleCheck1">Check me out</label>
   </div>
   <button type="submit" class="btn btn-primary">登録</button>
-  <button class="btn btn-secondary"><a class="text-light text-decoration-none" href="{{route('drivers.index')}}"></a>戻る</a></button>
+  <button type="button" onclick="history.back()" class="btn btn-secondary text-light">戻る</button>
 </form>
 @endsection
