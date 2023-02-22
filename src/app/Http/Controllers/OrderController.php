@@ -18,6 +18,8 @@ class OrderController extends Controller
     /**
      * 一覧ページ
      */
+    protected const SCHEDULED_DISCOUNT_RATE = 0.05;
+
     public function index()
     {
         $orders = Order::where('user_id', Auth::id())->get();
@@ -71,6 +73,7 @@ class OrderController extends Controller
         $cart = session('cart');
         $cart_collection = collect();
 
+
         if (isset($cart)) {
             $cart->each(function ($item, $key) use ($cart_collection) {
                 $product = Product::findOrFail($key);
@@ -80,14 +83,18 @@ class OrderController extends Controller
                         'quantity'  => $item,
                         'name'      => $product->name,
                         'thumbnail' => $product->thumbnail,
-                        'price'     => $product->price
+                        'price'     => $product->price,
                     ])
                 );
+
+                // $total_price += $product->quantity * $product->price;
             });
         }
 
+        $discount_rate = self::SCHEDULED_DISCOUNT_RATE;
 
-        return view('order.confirm', compact('delivery_address', 'cart_collection', 'delivery_time_disp', 'delivery_method_disp', 'user', 'is_scheduled', 'delivery_span'));
+        return view('order.confirm',
+        compact('delivery_address', 'cart_collection', 'delivery_time_disp', 'delivery_method_disp', 'user', 'is_scheduled', 'delivery_span', 'discount_rate'));
     }
 
     /**
@@ -98,6 +105,8 @@ class OrderController extends Controller
     {
         $delivery = session('delivery');
 
+        $total_price = session('total_value') * (1 - self::SCHEDULED_DISCOUNT_RATE);
+
         $order = Order::create([
             'user_id'               => Auth::id(),
             'delivery_address_id'   => $delivery->get('delivery_address_id'),
@@ -105,7 +114,7 @@ class OrderController extends Controller
             'is_am'                 => $delivery->get('delivery_time_isam'),
             'delivery_method_id'    => $delivery->get('delivery_method'),
             'delivery_status_id'    => DeliveryStatus::getInPreparationId(),
-            'total_price'           => session('total_value'),
+            'total_price'           => $total_price,
             'is_scheduled' => $delivery->get('is_scheduled'),
             'delivery_span' => $delivery->get('delivery_span'),
         ]);
