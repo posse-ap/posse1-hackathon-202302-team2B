@@ -92,9 +92,16 @@
             <dt>配送間隔</dt>
             <dd>
                 {{$order->delivery_span}}日
-               </dd>
+            </dd>
+
+            <form action="{{route('order.scheduled.cancel', ['id' => $order->id])}}" method="POST">
+                @csrf
+                <input type="hidden" name="id" value="{{ $order->id }}">
+                <button type="submit" class="btn btn-primary">定期便をキャンセル</button>
+            </form>
             @endif
         </div>
+
         <div class="block">
             <dt>配送状態</dt>
             <dd>{{ $order->delivery_status->name }}</dd>
@@ -114,6 +121,7 @@
             @endif
         </div>
     </div>
+
     <div class="text-right pr15">
         <button type="button" class="btn btn-ash" onclick="location.href='{{ route('order') }}'">
             注文履歴一覧に戻る
