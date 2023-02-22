@@ -46,7 +46,9 @@ class LoginController extends Controller
     {
         $role_id = Auth::user()->role_id;
 
-        if ($role_id === Role::getAdminId() || $role_id === Role::getDeliveryAgentId()) {
+        if ($role_id === Role::getAdminId()) {
+            return '/admin';
+        } elseif($role_id === Role::getDeliveryAgentId()) {
             return '/delivery-list';
         } else {
             return '/';

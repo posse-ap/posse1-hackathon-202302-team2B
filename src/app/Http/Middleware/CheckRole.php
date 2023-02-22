@@ -13,7 +13,14 @@ class CheckRole
         if (!$user->hasRole($role)) {
             $role_id = $user->role_id;
 
-            if ($role_id === Role::getAdminId() || $role_id === Role::getDeliveryAgentId()) {
+            if ($role_id === Role::getAdminId()) {
+                return redirect()
+                        ->route('admin.index')
+                        ->with([
+                            'flush.message' => 'ページ閲覧権限がありません',
+                            'flush.alert_type' => 'danger',
+                        ]);
+            } else if($role_id === Role::getDeliveryAgentId()) {
                 return redirect()
                         ->route('delivery-list')
                         ->with([
