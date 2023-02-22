@@ -93,8 +93,10 @@ class OrderController extends Controller
 
         $discount_rate = self::SCHEDULED_DISCOUNT_RATE;
 
-        return view('order.confirm',
-        compact('delivery_address', 'cart_collection', 'delivery_time_disp', 'delivery_method_disp', 'user', 'is_scheduled', 'delivery_span', 'discount_rate'));
+        return view(
+            'order.confirm',
+            compact('delivery_address', 'cart_collection', 'delivery_time_disp', 'delivery_method_disp', 'user', 'is_scheduled', 'delivery_span', 'discount_rate')
+        );
     }
 
     /**
@@ -184,5 +186,22 @@ class OrderController extends Controller
         $orders = Order::where('user_id', Auth::id())->where('is_scheduled', true)->get();
 
         return view('order.scheduled.index', compact('orders'));
+    }
+
+    public function cancel_scheduled(Request $request)
+    {
+        $order_id = $request->input('id');
+        $order = Order::find($order_id);
+
+        $order->is_scheduled = false;
+
+        $order->save();
+
+        return redirect()
+            ->route('order.detail', [$order])
+            ->with([
+                'flush.message' => '定期便のキャンセルが完了しました。',
+                'flush.alert_type' => 'success',
+            ]);
     }
 }

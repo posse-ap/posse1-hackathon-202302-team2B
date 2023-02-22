@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+<form action="{{route('delivery.udpate', ['order_id' => $order->id])}}" method="POST">
+    @csrf
+    <input type="hidden" name="order_id" value="{{ $order->id }}">
+
 <div class="order-detail max-width-800-center">
     <div class="head">
         注文履歴
@@ -92,43 +96,29 @@
             <dt>配送間隔</dt>
             <dd>
                 {{$order->delivery_span}}日
-            </dd>
-
-            <form action="{{route('order.scheduled.cancel', ['id' => $order->id])}}" method="POST">
-                @csrf
-                <input type="hidden" name="id" value="{{ $order->id }}">
-                <button type="submit" class="btn btn-primary">定期便をキャンセル</button>
-            </form>
+               </dd>
             @endif
         </div>
-
         <div class="block">
             <dt>配送状態</dt>
             <dd>{{ $order->delivery_status->name }}</dd>
-            @if ($order->delivery_status->isCancelable())
-            <form action="{{ route('order.cancel') }}" method="POST">
-                @csrf
-                <input type="hidden" name="id" value="{{ $order->id }}">
-                <button type="submit" class="btn btn-danger">キャンセル予約</button>
-                @if($order->is_scheduled)
-                <p>＊次便以降はキャンセルとなりません。</p>
-                @endif
-            </form>
-            @endif
-            @if ($order->isReturnable())
-            <form action="{{ route('order.return') }}" method="POST">
-                @csrf
-                <input type="hidden" name="id" value="{{ $order->id }}">
-                <button type="submit" class="btn btn-danger">返品申請</button>
-            </form>
-            @endif
+            <select name="delivery_status">
+                <option value="1" {{ $order->delivery_status_id == 1 ? 'selected' : '' }}>準備中</option>
+                <option value="2" {{ $order->delivery_status_id == 2 ? 'selected' : '' }}>配送中</option>
+                <option value="3" {{ $order->delivery_status_id == 3 ? 'selected' : '' }}>配送済み</option>
+                <option value="5" {{ $order->delivery_status_id == 5 ? 'selected' : '' }}>キャンセル済み
+                </option>
+                <option value="6" {{ $order->delivery_status_id == 6 ? 'selected' : '' }}>返品申請中</option>
+                <option value="7" {{ $order->delivery_status_id == 7 ? 'selected' : '' }}>返品配送待ち
+                </option>
+                <option value="8" {{ $order->delivery_status_id == 8 ? 'selected' : '' }}>返品配送中</option>
+                <option value="9" {{ $order->delivery_status_id == 9 ? 'selected' : '' }}>返品済み</option>
+            </select>
         </div>
     </div>
-
     <div class="text-right pr15">
-        <button type="button" class="btn btn-ash" onclick="location.href='{{ route('order') }}'">
-            注文履歴一覧に戻る
-        </button>
+        <button type="submit" class="btn btn-primary">更新</button>
     </div>
 </div>
+</form>
 @endsection

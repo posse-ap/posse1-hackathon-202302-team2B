@@ -20,9 +20,12 @@ use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\Driver\DeliveryController;
 use App\Http\Controllers\ScheduledOrderController;
 use App\Models\Order;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\ProductController;
+
 
 // 未ログイン
 Route::middleware([])->group(function () {
@@ -79,6 +82,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/thanks', 'thanks')->name('order.thanks');
             Route::get('/scheduled', 'scheduled_orders')->name('order.scheduled');
             Route::get('/{id}', 'detail')->name('order.detail');
+            Route::post('/{id}/scheduled', 'cancel_scheduled')->name('order.scheduled.cancel');
             Route::post('/confirm', 'confirm')->name('order.confirm');
             Route::post('/cancel', 'cancel')->name('order.cancel');
             Route::post('/return', 'request_return')->name('order.return');
@@ -89,17 +93,28 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:admin'])->group(function () {
         Route::prefix('admin')->group(function () {
             Route::get('/', [HomeController::class, 'index'])->name('admin.index');
+            
             // 配送業者
             Route::resource('drivers', DriverController::class);
+            
+            // 購入履歴
             Route::resource('orders', Admin\OrderController::class);
+            // Route::get('/{id}', [DeliveryListDetailController::class, 'detail'])->name('delivery-list.detail');
+            
+            // 商品情報
+            Route::get('product', [ProductController::class, 'index'])->name('admin.product.index');
         });
     });
 
     // 配送業者
     Route::middleware(['role:delivery-agent'])->group(function () {
-        Route::prefix('delivery-list')->group(function () {
-            Route::get('/', [DeliveryListController::class, 'index'])->name('delivery-list');
+        Route::controller(DeliveryController::class)->prefix('delivery-list')->group(function () {
+            Route::get('/', 'index')->name('delivery-list');
             // Route::get('/{id}', [DeliveryListDetailController::class, 'detail'])->name('delivery-list.detail');
+            Route::get('/{order_id}', 'detail')->name('delivery.detail');
+            Route::post('/{order_id}', 'update')->name('delivery.udpate');
         });
     });
 });
+
+

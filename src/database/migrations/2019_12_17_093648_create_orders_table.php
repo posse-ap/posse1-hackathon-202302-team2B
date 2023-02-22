@@ -43,6 +43,7 @@ class CreateOrdersTable extends Migration
             $table->unsignedInteger('delivery_span')->default(14);  # day
             $table->unsignedInteger('truck_id')->nullable();
             $table->dateTime('canceled_at')->nullable();
+            $table->unsignedInteger('driver_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
@@ -51,6 +52,7 @@ class CreateOrdersTable extends Migration
             $table->foreign('delivery_method_id')->references('id')->on('delivery_methods');
             $table->foreign('delivery_status_id')->references('id')->on('delivery_statuses');
             $table->foreign('truck_id')->references('id')->on('trucks');
+            $table->foreign('driver_id')->references('id')->on('users');
         });
     }
 
