@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\ScheduledOrderController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\ProductController;
 
 // 未ログイン
 Route::middleware([])->group(function () {
@@ -89,6 +90,10 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', [HomeController::class, 'index'])->name('admin.index');
             // 配送業者
             Route::resource('drivers', DriverController::class);
+            // Route::get('/{id}', [DeliveryListDetailController::class, 'detail'])->name('delivery-list.detail');
+            //商品情報
+            Route::get('product', [ProductController::class, 'index'])->name('admin.product.index');
+
         });
     });
 
@@ -100,3 +105,5 @@ Route::middleware(['auth'])->group(function () {
         });
     });
 });
+
+
