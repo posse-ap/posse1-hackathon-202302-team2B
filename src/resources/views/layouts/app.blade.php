@@ -12,6 +12,20 @@
         @section('header')
             <nav class="navbar sticky-top navbar-expand-sm navbar-green mb-3">
                 <a class="navbar-brand" href="{{ route('home') }}">IchiIchiban</a>
+                <?php
+                use Illuminate\Support\Facades\Auth;
+                $data =Auth::user();
+                ?>
+
+                @if ($data == false)
+
+                @elseif ($data->role_id == '1')
+                {{Auth::user()->name}}(管理者)
+                @elseif ($data->role_id == '2')
+                {{Auth::user()->name}}
+                @elseif ($data->role_id == '3')
+                {{Auth::user()->name}}(配送者)
+                @endif
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav4" aria-controls="navbarNav4" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"><i class="material-icons icon-white">dehaze</i></span>
                 </button>

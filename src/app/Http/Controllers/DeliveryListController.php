@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class DeliveryListController extends Controller
 {
@@ -13,7 +14,9 @@ class DeliveryListController extends Controller
             ->where('delivery_date', '>=', Carbon::today()->format('Y-m-d'))
             ->where('delivery_date', '<', Carbon::today()->addDay(2)->format('Y-m-d'))
             ->get();
-        return view('delivery.index', compact('orders'));
+            
+        $data =Auth::user();
+        return view('delivery.index', compact('orders','data'));
     }
 
     public function detail($order_id)
