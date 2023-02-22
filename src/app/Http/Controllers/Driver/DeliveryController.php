@@ -15,7 +15,7 @@ class DeliveryController extends Controller
             ->where('delivery_date', '>=', Carbon::today()->format('Y-m-d'))
             ->where('delivery_date', '<', Carbon::today()->addDay(2)->format('Y-m-d'))
             ->get();
-        return view('delivery.index', compact('orders'));
+        return view('driver.delivery.index', compact('orders'));
     }
 
     public function detail($order_id)
