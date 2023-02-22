@@ -6,7 +6,7 @@
 
   <ul class="nav justify-content-end gap-2 bg-light rounded">
     <li class="nav-item"><a href="" class="text-decoration-none text-dark">products</a></li>
-    <li class="nav-item"><a href="{{ route('drivers.index') }}" class="text-decoration-none text-dark">drivers</a></li>
+    <li class="nav-item"><a href="{{ route('admin.drivers.index') }}" class="text-decoration-none text-dark">drivers</a></li>
     <li class="nav-item"><a href="" class="text-decoration-none text-dark">orders</a></li>
     <li class="nav-item"><a href="" class="text-decoration-none text-dark">sales</a></li>
     <li class="nav-item px-4"><a href="" class="text-decoration-none text-dark">users</a></li>
