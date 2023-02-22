@@ -54,11 +54,51 @@
                             <div class="col-12 text-right">¥{{ $order->total_price }}</div>
                         </div>
 
-                        <div class="text-right">
+                        <div class="text-right d-flex justify-content-between">
+                            <div>
                             <button type="button" class="btn btn-ash"
                                     onclick="location.href='/delivery-list/{{ $order->id }}'">
                                 詳細を見る
                             </button>
+                                <?php
+                                $id = 6;
+                                ?>
+                                @if($id == 1)
+                                配送済
+                                @elseif($id == 2)
+                                <button type="button" class="btn btn-ash"
+                                    onclick="">
+                                    配送完了
+                                </button>
+                                </div>
+                                <p class="text-danger fs-3">
+                                    配送中
+                                </p>
+                                @elseif($id == 3)
+                                </div>
+                                <p class="text-danger fs-3">
+                                    配送前
+                                </p>
+                                @elseif($id == 4)
+                                </div>
+                                <p class="text-danger fs-3">
+                                    返品受け取り前
+                                </p>
+                                @elseif($id == 5)
+                                <button type="button" class="btn btn-ash"
+                                    onclick="">
+                                    返品完了
+                                </button>
+                                </div>
+                                <p class="text-danger fs-3">
+                                    返品受け取り中
+                                </p>
+                                @elseif($id == 6)
+                                </div>
+                                <p class="text-danger fs-3">
+                                    返品受け取り済み
+                                </p>
+                                @endif
                         </div>
                     </div>
                 </li>
