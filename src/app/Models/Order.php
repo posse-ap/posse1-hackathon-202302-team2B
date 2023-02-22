@@ -23,6 +23,8 @@ class Order extends Model
         'delivery_status_id',
         'total_price',
         'truck_id',
+        'is_scheduled',
+        'delivery_span',
         'canceled_at',
         'updated_at',
     ];

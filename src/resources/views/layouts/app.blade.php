@@ -35,6 +35,9 @@
                             <a href="{{  route('order') }}" class="nav-link"><i class="material-icons md-light cartColor">receipt</i>注文履歴</a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{  route('order.scheduled') }}" class="nav-link"><i class="material-icons md-light cartColor">receipt</i>定期便</a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{  route('cart') }}" class="nav-link"><i class="material-icons md-light cartColor">shopping_cart</i>カートに行く</a>
                         </li>
                         @auth

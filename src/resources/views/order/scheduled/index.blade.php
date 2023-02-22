@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="order-index">
-        <h2>注文履歴一覧</h2>
+        <h2>定期便一覧</h2>
 
         @foreach ($orders as $order)
             <a href="{{  route('order.detail', [ 'id' => $order->id ]) }}" class="link-area">
