@@ -2,7 +2,7 @@
 
 @section('content')
 <nav class="pb-2 border-bottom navbar">
-  <h2>ドライバーリスト</h2>
+  <h2>プロダクト</h2>
 
   <ul class="nav justify-content-end gap-2 bg-light rounded">
     <li class="nav-item"><a href="" class="text-decoration-none text-dark">products</a></li>
