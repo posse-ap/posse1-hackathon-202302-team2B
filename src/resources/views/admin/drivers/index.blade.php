@@ -19,4 +19,5 @@
       </tr>
       @endforeach
     </table>
+    <a href="{{ route('drivers.create') }}">{{ __('新規作成') }}</a>
 @endsection
