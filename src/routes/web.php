@@ -78,6 +78,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/thanks', 'thanks')->name('order.thanks');
             Route::get('/scheduled', 'scheduled_orders')->name('order.scheduled');
             Route::get('/{id}', 'detail')->name('order.detail');
+            Route::post('/{id}/scheduled', 'cancel_scheduled')->name('order.scheduled.cancel');
             Route::post('/confirm', 'confirm')->name('order.confirm');
             Route::post('/cancel', 'cancel')->name('order.cancel');
             Route::post('/return', 'request_return')->name('order.return');
