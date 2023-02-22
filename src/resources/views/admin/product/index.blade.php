@@ -55,6 +55,6 @@
   @endforeach
 </table>
 <button class="btn btn-primary">
-  <a href="#" class="text-decoration-none text-light">{{ __('新規作成') }}</a>
+  <a href="{{route('admin.product.create')}}" class="text-decoration-none text-light">{{ __('新規作成') }}</a>
 </button>
 @endsection

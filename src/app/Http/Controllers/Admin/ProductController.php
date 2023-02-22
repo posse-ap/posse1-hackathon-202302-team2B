@@ -28,7 +28,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.product.create');
     }
 
     /**
@@ -39,7 +39,23 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $products=new Product;
+
+
+        $products->name=$request->input('name');
+        $products->description=$request->input('description');
+        $products->image1=$request->input('image1');
+        $products->quantity=$request->input('quantity');
+        $products->price=$request->input('price');
+        $products->discount_rate=$request->input('discount_rate');
+        $products->is_active=$request->input('is_active');
+        $products->version = 1;
+        $products->thumbnail = '9_thumbnail.jpg';
+
+
+        $products->save();
+
+        return redirect('admin/product');
     }
 
     /**
