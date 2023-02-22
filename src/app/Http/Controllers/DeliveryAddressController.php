@@ -36,10 +36,10 @@ class DeliveryAddressController extends Controller
         ]);
 
         return redirect()
-                ->route('delivery-address')
-                ->with([
-                    'flush.message'    => '配送先の追加が完了しました',
-                    'flush.alert_type' => 'success',
-                ]);
+            ->route('delivery-address')
+            ->with([
+                'flush.message'    => '配送先の追加が完了しました',
+                'flush.alert_type' => 'success',
+            ]);
     }
 }
