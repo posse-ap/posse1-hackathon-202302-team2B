@@ -79,14 +79,20 @@ class OrderController extends Controller
         $order = Order::find($id);
         $delivery_status_id = $request->input('delivery_status_id');
 
+        if ($delivery_status_id == DeliveryStatus::getCanceledId()) {
+            $order->calceled_at = Carbon::now();
+            $message = 'キャンセル済みに変更しました';
+        } else {
+            $message = '返品を受領しました。';
+        }
         $order->delivery_status_id = $delivery_status_id;
-        
+
         $order->save();
 
         return redirect()
         ->route('admin.orders.index')
         ->with([
-            'flush.message' => 'キャンセル済みに変更しました',
+            'flush.message' => $message,
             'flush.alert_type' => 'success',
         ]);
     }
