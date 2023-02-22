@@ -77,10 +77,10 @@ class CartController extends Controller
 
 
         return redirect()->route('cart')
-        ->with([
-            'flush.message' => 'カートから削除しました。',
-            'flush.alert_type' => 'success',
-        ]);
+            ->with([
+                'flush.message' => 'カートから削除しました。',
+                'flush.alert_type' => 'success',
+            ]);
     }
 
     public function flush()

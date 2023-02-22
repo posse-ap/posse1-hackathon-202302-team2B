@@ -42,10 +42,10 @@ class DeliveryController extends Controller
         $order->save();
 
         return redirect()
-        ->route('delivery-list')
-        ->with([
-            'flush.message' => 'ステータスを変更しました',
-            'flush.alert_type' => 'success',
-        ]);
+            ->route('delivery-list')
+            ->with([
+                'flush.message' => 'ステータスを変更しました',
+                'flush.alert_type' => 'success',
+            ]);
     }
 }

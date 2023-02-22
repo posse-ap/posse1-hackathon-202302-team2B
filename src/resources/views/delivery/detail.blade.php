@@ -91,12 +91,10 @@
                 <dt class="mb-2">購入した商品</dt>
                 <div class="row justify-content-sm-center mb-2">
                     @foreach ($order->order_details as $order_detail)
-                    <div class="col-4"><img
-                                src="{{ asset('img/' . $order_detail->product->thumbnail) }}"
-                                style="height: 150px; width: 100%; display: block;"
-                                alt="tomato"></div>
-                    <div class="col-5">{{ $order_detail->product->name }}</div>
-                    <div class="col-3 text-right">{{ $order_detail->quantity }}個</div>
+                        <div class="col-4"><img src="{{ asset('img/' . $order_detail->product->thumbnail) }}"
+                                style="height: 150px; width: 100%; display: block;" alt="tomato"></div>
+                        <div class="col-5">{{ $order_detail->product->name }}</div>
+                        <div class="col-3 text-right">{{ $order_detail->quantity }}個</div>
                     @endforeach
                 </div>
                 <dt class="border-top pt-1">合計金額</dt>
