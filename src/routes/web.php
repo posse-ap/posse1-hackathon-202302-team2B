@@ -99,7 +99,7 @@ Route::middleware(['auth'])->group(function () {
             
             // 購入履歴
             Route::resource('orders', Admin\OrderController::class);
-            // Route::get('/{id}', [DeliveryListDetailController::class, 'detail'])->name('delivery-list.detail');
+            Route::post('orders/sort', [Admin\OrderScopeController::class, 'scope'])->name('orders.scope');
             
             // 商品情報
             Route::get('product', [ProductController::class, 'index'])->name('admin.product.index');

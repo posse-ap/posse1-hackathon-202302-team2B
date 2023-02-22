@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\DeliveryStatus;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
@@ -15,10 +16,11 @@ class OrderController extends Controller
      */
     public function index()
     {
+        $delivery_status_list = DeliveryStatus::select('id', 'name')->get();
         $order_list = Order::with(['user:id,name','delivery_address','delivery_method','delivery_status'])->get();
         // dd($order_list);
 
-        return view('admin/orders/index', compact('order_list'));
+        return view('admin/orders/index', compact('delivery_status_list', 'order_list'));
     }
 
     /**
