@@ -75,10 +75,10 @@ Route::middleware(['auth'])->group(function () {
         Route::controller(OrderController::class)->prefix('order')->group(function () {
             Route::get('/', 'index')->name('order');
             Route::get('/thanks', 'thanks')->name('order.thanks');
+            Route::get('/scheduled', 'scheduled_orders')->name('order.scheduled');
             Route::get('/{id}', 'detail')->name('order.detail');
             Route::post('/confirm', 'confirm')->name('order.confirm');
             Route::post('/cancel', 'cancel')->name('order.cancel');
-
             Route::post('/return', 'request_return')->name('order.return');
         });
     });
@@ -98,7 +98,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:delivery-agent'])->group(function () {
         Route::prefix('delivery-list')->group(function () {
             Route::get('/', [DeliveryListController::class, 'index'])->name('delivery-list');
-            Route::get('/{id}', [DeliveryListDetailController::class, 'detail'])->name('delivery-list.detail');
+            // Route::get('/{id}', [DeliveryListDetailController::class, 'detail'])->name('delivery-list.detail');
         });
     });
 });

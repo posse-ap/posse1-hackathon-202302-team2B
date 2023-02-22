@@ -35,10 +35,6 @@ class Order extends Model
         'updated_at',
     ];
 
-    protected $casts = [
-        'is_scheduled' => 'boolean',
-    ];
-
     public function user()
     {
         return $this->belongsTo('App\Models\User');

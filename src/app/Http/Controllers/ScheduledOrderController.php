@@ -16,6 +16,6 @@ class ScheduledOrderController extends Controller
         $delivery->put('delivery_method', $delivery_method);
         session(['delivery' => $delivery]);
 
-        return view('order.scheduled.index');
+        return view('order.scheduled.register');
     }
 }

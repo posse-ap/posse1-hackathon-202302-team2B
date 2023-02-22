@@ -20,7 +20,6 @@ class OrderController extends Controller
      */
     public function index()
     {
-
         $orders = Order::where('user_id', Auth::id())->get();
 
         return view('order.index', compact('orders'));
@@ -43,12 +42,6 @@ class OrderController extends Controller
     {
         //前画面の入力項目をセッションに保持
         $delivery = session('delivery');
-        // [$delivery_time, $delivery_time_isam] = explode(' ', $request->input('delivery_time'));
-        // $delivery_method = $request->input('delivery_method');
-        // $delivery->put('delivery_time', $delivery_time);
-        // $delivery->put('delivery_time_isam', $delivery_time_isam);
-        // $delivery->put('delivery_method', $delivery_method);
-        // session(['delivery' => $delivery]);
         $is_scheduled = $request->has('is_scheduled');
         $delivery_span = $request->input('delivery_span');
 
@@ -175,5 +168,12 @@ class OrderController extends Controller
                 'flush.message' => '返品申請をしました。',
                 'flush.alert_type' => 'success',
             ]);
+    }
+
+    public function scheduled_orders(Request $request)
+    {
+        $orders = Order::where('user_id', Auth::id())->where('is_scheduled', true)->get();
+
+        return view('order.scheduled.index', compact('orders'));
     }
 }
