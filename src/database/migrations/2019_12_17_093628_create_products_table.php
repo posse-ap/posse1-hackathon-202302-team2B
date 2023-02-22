@@ -22,6 +22,8 @@ class CreateProductsTable extends Migration
             $table->string('image1');
             $table->string('quantity');
             $table->unsignedInteger('price');
+            $table->float('discount_rate')->default(1.0);
+            $table->unsignedInteger('discount_amount')->nullable()->default(null);
             $table->boolean('is_active');
             $table->timestamps();
             $table->softDeletes();
