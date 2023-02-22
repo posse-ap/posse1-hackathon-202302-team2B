@@ -1,17 +1,56 @@
 @extends('layouts.app')
 
 @section('content')
-<nav class="pb-2 border-bottom navbar">
-  <h2>購入一覧</h2>
+  <nav class="pb-2 border-bottom navbar">
+    <h2>購入一覧</h2>
+    
+    <ul class="nav justify-content-end gap-2 bg-light rounded">
+      <li class="nav-item"><a href="" class="text-decoration-none text-dark">products</a></li>
+      <li class="nav-item"><a href="{{ route('drivers.index') }}" class="text-decoration-none text-dark">drivers</a></li>
+      <li class="nav-item"><a href="{{ route('orders.index') }}" class="text-decoration-none text-dark">orders</a></li>
+      <li class="nav-item"><a href="" class="text-decoration-none text-dark">sales</a></li>
+      <li class="nav-item px-4"><a href="" class="text-decoration-none text-dark">users</a></li>
+    </ul>
+  </nav>
 
-  <ul class="nav justify-content-end gap-2 bg-light rounded">
-    <li class="nav-item"><a href="" class="text-decoration-none text-dark">products</a></li>
-    <li class="nav-item"><a href="{{ route('admin.drivers.index') }}" class="text-decoration-none text-dark">drivers</a></li>
-    <li class="nav-item"><a href="{{ route('admin.orders.index') }}" class="text-decoration-none text-dark">orders</a></li>
-    <li class="nav-item"><a href="" class="text-decoration-none text-dark">sales</a></li>
-    <li class="nav-item px-4"><a href="" class="text-decoration-none text-dark">users</a></li>
-  </ul>
-</nav>
+  <!-- 絞り込み機能ここから -->
+  <div class="search p-4 bg-light">
+      <form action="{{ route('orders.scope') }}" method="POST" class="my-0">
+          @csrf
+          <div class="container">
+            <div class="row">
+              <div class="col-6">配達期間</div>
+              <div class="col-3">配達時間</div>
+              <div class="col-3">配送ステータス</div>
+            </div>
+            <div class="row">
+              <div class="col-6 flex">
+                <input type="date" name="date_from" id="">　〜　<input type="date" name="date_to" id="">
+              </div>
+              <div class="col-3">
+                <select class="form-select" name="is_am">
+                  <option value="">---</option>
+                  <option value="1">午前</option>
+                  <option value="0">午後</option>
+                </select>
+              </div>
+              <div class="col-3">
+                <select class="form-select" name="delivery_status">
+                  <option selected="" value="">---</option>
+                  @foreach($delivery_status_list as $status)
+                  <option value="{{$status->id}}">{{$status->name}}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="my-2 modal-footer">
+            <button type="submit" class="btn btn-primary">検索</button>
+          </div>
+      </form>
+  </div>
+    <!-- 絞り込み機能ここまで -->
+    
 <table class="table">
   <tr>
     <th>ID</th>
