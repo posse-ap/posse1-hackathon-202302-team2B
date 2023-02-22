@@ -1,0 +1,49 @@
+version: '3.7'
+
+services:
+  nginx:
+    build         :
+      context: ./nginx
+    image         : ichiichiban-web
+    hostname      : ichiichiban-web
+    container_name: ichiichiban-web
+    depends_on    :
+      - php
+    ports         :
+      - 80:80
+    volumes       :
+      - ./src:/var/www/ichiichiban:cached
+  php:
+    build         :
+      context: ./phpfpm
+    image         : ichiichiban-php
+    hostname      : ichiichiban-php
+    container_name: ichiichiban-php
+    volumes       :
+      - ./src:/var/www/ichiichiban:cached
+  mysql:
+    #restart: always
+    build         :
+      context: ./mysql
+    platform: linux/amd64
+    image         : ichiichiban-db
+    hostname      : ichiichiban-db
+    container_name: ichiichiban-db
+    volumes       :
+      - ./mysql/data:/var/lib/mysql
+    environment   :
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=ichiichiban
+    ports         :
+      - 3306:3306
+
+  mailhog:
+    # container_name: hackathon_mail_dev
+    image: mailhog/mailhog
+    platform: linux/amd64
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+networks:
+  default:
+    name: ichiichiban-network
