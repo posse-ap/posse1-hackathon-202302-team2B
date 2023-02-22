@@ -118,7 +118,7 @@
 
         <div class="block">
             <dt>小計</dt>
-            <dd>{{$total_value}}</dd>
+            <dd><b>{{$total_value}}</b>円</dd>
         </div>
 
         <div class="block">
