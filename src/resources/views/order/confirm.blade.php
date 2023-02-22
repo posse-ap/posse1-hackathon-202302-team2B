@@ -92,7 +92,6 @@
             <dt class="mb-2">カートに入っている商品</dt>
 
             @foreach ($cart_collection as $cart)
-
             <div class="row justify-content-sm-center mb-2">
                 <div class="col-4"><img src="{{ asset('img/' . $cart->get('thumbnail')) }}"
                         style="height: 150px; width: 100%; display: block;" alt="tomato"></div>
@@ -118,6 +117,11 @@
         </div>
 
         <div class="block">
+            <dt>小計</dt>
+            <dd><b>{{$total_value}}</b>円</dd>
+        </div>
+
+        <div class="block">
             <dt>定期便</dt>
             <dd>@if ($is_scheduled)
                 はい
@@ -125,8 +129,8 @@
                 いいえ
                 @endif</dd>
             @if ($is_scheduled)
-                <dt>定期便割引率</dt>
-                <dd>{{$discount_rate * 100}}%</dd>
+            <dt>定期便割引率</dt>
+            <dd>{{$discount_rate * 100}}%</dd>
             @endif
         </div>
     </div>

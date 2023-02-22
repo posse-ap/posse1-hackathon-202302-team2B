@@ -64,6 +64,7 @@
     <th>キャンセル</th>
     <th>編集</th>
     <th>キャンセル承認</th>
+    <th>返品</th>
   </tr>
   @foreach($order_list as $order)
     <tr>
@@ -83,19 +84,31 @@
           <a href="{{ route('admin.orders.show', ['order'=>$order->id]) }}" class="text-decoration-none text-light"> {{ __('編集') }} </a>
         </button>
       </td>
-      @if ($order->delivery_status_id == 4)
-      <td>
-        <form action="{{route('admin.orders.update', ['order' => $order->id])}}" method="POST">
-          @method('PATCH')
-          @csrf
-          <select name="delivery_status_id">
-            <option value="5">キャンセル承認</option>
-          </select>
-          <button type="submit" class="btn btn-primary">保存</button>
-        </form>
-      </td>
-      @endif
+          @if ($order->delivery_status_id == 4)
+    <th>
+      <form action="{{route('admin.orders.update', ['order' => $order->id])}}" method="POST">
+        @method('PATCH')
+        @csrf
+        <select name="delivery_status_id">
+          <option value="5">キャンセル承認</option>
+        </select>
+        <button type="submit" class="btn btn-primary">保存</button>
+      </form>
+    </th>
+    @elseif($order->delivery_status_id == 6)
+    <th>
+      <form action="{{route('admin.orders.update', ['order' => $order->id])}}" method="POST">
+        @method('PATCH')
+        @csrf
+        <select name="delivery_status_id">
+          <option value="7">返品配送待ち</option>
+        </select>
+        <button type="submit" class="btn btn-primary">保存</button>
+      </form>
+    </th>
+    @endif
     </tr>
+
   @endforeach
 </table>
 {{-- <a href="{{ route('drivers.create') }}">{{ __('新規作成') }}</a> --}}

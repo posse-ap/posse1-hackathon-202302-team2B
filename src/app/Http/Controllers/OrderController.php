@@ -93,9 +93,11 @@ class OrderController extends Controller
 
         $discount_rate = self::SCHEDULED_DISCOUNT_RATE;
 
+        $total_value = session('total_value');
+
         return view(
             'order.confirm',
-            compact('delivery_address', 'cart_collection', 'delivery_time_disp', 'delivery_method_disp', 'user', 'is_scheduled', 'delivery_span', 'discount_rate')
+            compact('delivery_address', 'cart_collection', 'delivery_time_disp', 'delivery_method_disp', 'user', 'is_scheduled', 'delivery_span', 'discount_rate', 'total_value')
         );
     }
 

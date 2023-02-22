@@ -36,6 +36,14 @@ services:
       - MYSQL_DATABASE=ichiichiban
     ports         :
       - 3306:3306
+
+  mailhog:
+    # container_name: hackathon_mail_dev
+    image: mailhog/mailhog
+    platform: linux/amd64
+    ports:
+      - "1025:1025"
+      - "8025:8025"
 networks:
   default:
     name: ichiichiban-network
