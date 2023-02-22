@@ -17,7 +17,7 @@ class ProductController extends Controller
     {
         $products = Product::all();
 
-        return view('admin.product.index', compact('products'));
+        return view('admin/product/index', compact('products'));
         
     }
 
@@ -61,7 +61,9 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $products =Product::find($id);
+
+        return view('admin/product/edit', compact('products'));
     }
 
     /**
@@ -73,7 +75,20 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $products=Product::find($id);
+
+        $products->name=$request->input('name');
+        $products->description=$request->input('description');
+        $products->image1=$request->input('image1');
+        $products->quantity=$request->input('quantity');
+        $products->price=$request->input('price');
+        $products->discount_rate=$request->input('discount_rate');
+        $products->is_active=$request->input('is_active');
+
+        //DBに保存
+        $products->save();
+
+        return redirect('admin/product');
     }
 
     /**

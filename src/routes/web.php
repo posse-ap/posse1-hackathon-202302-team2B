@@ -103,6 +103,7 @@ Route::middleware(['auth'])->group(function () {
             
             // 商品情報
             Route::get('product', [ProductController::class, 'index'])->name('admin.product.index');
+            Route::get('product/edit/{id}', [ProductController::class, 'edit'])->name('admin.product.edit');
         });
     });
 

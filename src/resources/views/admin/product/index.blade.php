@@ -41,7 +41,7 @@
     @endif
     <td>
       <button class="btn btn-success">
-        <a href="#" class="text-decoration-none text-light"> {{ __('編集') }} </a>
+        <a href="{{ route('admin.product.edit', ['id'=>$product->id]) }}" class="text-decoration-none text-light"> {{ __('編集') }} </a>
       </button>
     </td>
     <td>
