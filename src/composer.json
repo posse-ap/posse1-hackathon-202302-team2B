@@ -15,7 +15,8 @@
         "nesbot/carbon": "^2.66",
         "symfony/http-client": "^6.2",
         "symfony/mailgun-mailer": "^6.2",
-        "symfony/postmark-mailer": "^6.2"
+        "symfony/postmark-mailer": "^6.2",
+        "vluzrmos/slack-api": "^0.5.5"
     },
     "require-dev": {
         "spatie/laravel-ignition": "^1.0",
