@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DeliveryStatus;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -75,7 +76,19 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $order = Order::find($id);
+        $delivery_status_id = $request->input('delivery_status_id');
+
+        $order->delivery_status_id = $delivery_status_id;
+        
+        $order->save();
+
+        return redirect()
+        ->route('admin.orders.index')
+        ->with([
+            'flush.message' => 'キャンセル済みに変更しました',
+            'flush.alert_type' => 'success',
+        ]);
     }
 
     /**

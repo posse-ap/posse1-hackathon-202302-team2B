@@ -91,18 +91,20 @@ Route::middleware(['auth'])->group(function () {
 
     // 管理者
     Route::middleware(['role:admin'])->group(function () {
-        Route::prefix('admin')->group(function () {
+        Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/', [HomeController::class, 'index'])->name('admin.index');
-            
+
             // 配送業者
             Route::resource('drivers', DriverController::class);
-            
+
             // 購入履歴
             Route::resource('orders', Admin\OrderController::class);
             Route::post('orders/sort', [Admin\OrderScopeController::class, 'scope'])->name('orders.scope');
             
             // 商品情報
             Route::get('product', [ProductController::class, 'index'])->name('admin.product.index');
+            Route::get('product/edit/{id}', [ProductController::class, 'edit'])->name('admin.product.edit');
+            Route::post('product/update/{id}', [ProductController::class, 'update'])->name('admin.product.update');
         });
     });
 
@@ -116,5 +118,3 @@ Route::middleware(['auth'])->group(function () {
         });
     });
 });
-
-
