@@ -39,7 +39,7 @@ class CreateOrdersTable extends Migration
             $table->unsignedInteger('delivery_method_id');
             $table->unsignedInteger('delivery_status_id');
             $table->unsignedInteger('total_price');
-            $table->tinyInteger('is_schedules')->default(1);
+            $table->tinyInteger('is_scheduled')->default(1);
             $table->unsignedInteger('delivery_span')->default(14);
             $table->unsignedInteger('truck_id')->nullable();
             $table->dateTime('canceled_at')->nullable();
