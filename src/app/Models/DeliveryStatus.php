@@ -44,4 +44,24 @@ class DeliveryStatus extends Model
     {
         return 5;
     }
+
+    public static function getReturnRequestingId()
+    {
+        return 6;
+    }
+
+    public static function getWaitingReturningId()
+    {
+        return 7;
+    }
+
+    public static function getReturningId()
+    {
+        return 8;
+    }
+
+    public static function getReturnedId()
+    {
+        return 9;
+    }
 }

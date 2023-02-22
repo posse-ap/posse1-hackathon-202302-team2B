@@ -72,6 +72,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}', 'detail')->name('order.detail');
             Route::post('/confirm', 'confirm')->name('order.confirm');
             Route::post('/cancel', 'cancel')->name('order.cancel');
+
+            Route::post('/return', 'request_return')->name('order.return');
         });
     });
 

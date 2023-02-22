@@ -12,6 +12,8 @@ class Order extends Model
 
     const DATE_FORMAT = 'Y/m/d';
 
+    const RETURN_LIMIT = 12;
+
     protected $fillable = [
         'user_id',
         'delivery_address_id',
@@ -22,11 +24,13 @@ class Order extends Model
         'total_price',
         'truck_id',
         'canceled_at',
+        'updated_at',
     ];
 
     protected $dates = [
         'delivery_date',
         'canceled_at',
+        'updated_at',
     ];
 
     public function user()
@@ -62,6 +66,11 @@ class Order extends Model
     public function getFullFormatDeliveryDateAttribute()
     {
         return self::getFullFormatDeliveryDate($this->delivery_date, $this->is_am);
+    }
+
+    public function isReturnable()
+    {
+        return $this->delivery_status_id == DeliveryStatus::getDeliveredId() && Carbon::now()->diffInHours(new Carbon($this->updated_at)) <= self::RETURN_LIMIT;
     }
 
     public static function getDeliveryDateWhen(Carbon $delivery_date)
