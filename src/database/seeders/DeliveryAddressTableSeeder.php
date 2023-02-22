@@ -16,10 +16,10 @@ class DeliveryAddressTableSeeder extends Seeder
 	 */
 	public function run()
 	{
-		$user_id = User::where('role_id', Role::getUserId())->first()->id;
+		// $user_id = User::where('role_id', Role::getUserId())->first()->id;
 
 		DeliveryAddress::create([
-			'user_id'     => $user_id,
+			'user_id'     => 3,
 			'name'        => '職場',
 			'sort_number' => 1,
 			'postal_code' => '000-0000',
@@ -30,7 +30,7 @@ class DeliveryAddressTableSeeder extends Seeder
 			'tel'         => '090-XXXX-XXXX',
 		]);
 		DeliveryAddress::create([
-			'user_id'     => $user_id,
+			'user_id'     => 3,
 			'name'        => 'アパート',
 			'sort_number' => 2,
 			'postal_code' => '000-0000',
@@ -41,7 +41,7 @@ class DeliveryAddressTableSeeder extends Seeder
 			'tel'         => '090-XXXX-XXXX',
 		]);
 		DeliveryAddress::create([
-			'user_id'     => $user_id,
+			'user_id'     => 4,
 			'name'        => '実家',
 			'sort_number' => 3,
 			'postal_code' => '000-0000',
