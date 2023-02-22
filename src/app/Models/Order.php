@@ -23,6 +23,8 @@ class Order extends Model
         'delivery_status_id',
         'total_price',
         'truck_id',
+        'is_scheduled',
+        'delivery_span',
         'canceled_at',
         'updated_at',
     ];
@@ -31,6 +33,10 @@ class Order extends Model
         'delivery_date',
         'canceled_at',
         'updated_at',
+    ];
+
+    protected $casts = [
+        'is_scheduled' => 'boolean',
     ];
 
     public function user()

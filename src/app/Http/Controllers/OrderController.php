@@ -43,11 +43,21 @@ class OrderController extends Controller
     {
         //前画面の入力項目をセッションに保持
         $delivery = session('delivery');
-        [$delivery_time, $delivery_time_isam] = explode(' ', $request->input('delivery_time'));
-        $delivery_method = $request->input('delivery_method');
-        $delivery->put('delivery_time', $delivery_time);
-        $delivery->put('delivery_time_isam', $delivery_time_isam);
-        $delivery->put('delivery_method', $delivery_method);
+        // [$delivery_time, $delivery_time_isam] = explode(' ', $request->input('delivery_time'));
+        // $delivery_method = $request->input('delivery_method');
+        // $delivery->put('delivery_time', $delivery_time);
+        // $delivery->put('delivery_time_isam', $delivery_time_isam);
+        // $delivery->put('delivery_method', $delivery_method);
+        // session(['delivery' => $delivery]);
+        $is_scheduled = $request->has('is_scheduled');
+        $delivery_span = $request->input('delivery_span');
+
+        if (!$delivery_span) {
+            $delivery_span = 14;
+        }
+
+        $delivery->put('is_scheduled', $is_scheduled);
+        $delivery->put('delivery_span', $delivery_span);
         session(['delivery' => $delivery]);
 
         //配送先情報取得
@@ -57,8 +67,11 @@ class OrderController extends Controller
         $user = User::findOrFail(Auth::id());
 
         //配送時間帯・配送方法を取得
+        $delivery_time = $delivery->get('delivery_time');
         $delivery_time = Carbon::parse($delivery_time);
+        $delivery_time_isam = $delivery->get('delivery_time_isam');
         $delivery_time_disp = Order::getFullFormatDeliveryDate($delivery_time, $delivery_time_isam);
+        $delivery_method = $delivery->get('delivery_method');
         $delivery_method_disp = DeliveryMethod::findOrFail($delivery_method)->name;
 
         //カート情報取得
@@ -81,7 +94,7 @@ class OrderController extends Controller
         }
 
 
-        return view('order.confirm', compact('delivery_address', 'cart_collection', 'delivery_time_disp', 'delivery_method_disp', 'user'));
+        return view('order.confirm', compact('delivery_address', 'cart_collection', 'delivery_time_disp', 'delivery_method_disp', 'user', 'is_scheduled', 'delivery_span'));
     }
 
     /**
@@ -100,6 +113,8 @@ class OrderController extends Controller
             'delivery_method_id'    => $delivery->get('delivery_method'),
             'delivery_status_id'    => DeliveryStatus::getInPreparationId(),
             'total_price'           => session('total_value'),
+            'is_scheduled' => $delivery->get('is_scheduled'),
+            'delivery_span' => $delivery->get('delivery_span'),
         ]);
 
         $cart = session('cart');

@@ -19,6 +19,7 @@ use App\Http\Controllers\DeliveryTimeController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\DriverController;
+use App\Http\Controllers\ScheduledOrderController;
 use Illuminate\Support\Facades\Route;
 
 // 未ログイン
@@ -67,6 +68,9 @@ Route::middleware(['auth'])->group(function () {
         // 配送時間
         Route::post('/delivery-time', [DeliveryTimeController::class, 'index'])->name('delivery-time');
 
+        // 定期便
+        Route::post('/scheduled', [ScheduledOrderController::class, 'index'])->name('scheduled-order');
+
         // 注文
         Route::controller(OrderController::class)->prefix('order')->group(function () {
             Route::get('/', 'index')->name('order');
@@ -89,7 +93,7 @@ Route::middleware(['auth'])->group(function () {
             // Route::get('/{id}', [DeliveryListDetailController::class, 'detail'])->name('delivery-list.detail');
         });
     });
-    
+
     // 配送業者
     Route::middleware(['role:delivery-agent'])->group(function () {
         Route::prefix('delivery-list')->group(function () {

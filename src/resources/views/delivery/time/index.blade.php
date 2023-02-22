@@ -6,7 +6,7 @@
             ご希望の配送時間帯
         </div>
 
-        <form action="{{ route('order.confirm') }}" method="post">
+        <form action="{{ route('scheduled-order') }}" method="post">
             @csrf
             <div class="form-group max-width-800-center">
                 <label for="exampleFormControlSelect1">希望配達時間</label>

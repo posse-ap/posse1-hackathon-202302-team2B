@@ -108,6 +108,16 @@
                 @endforeach
 
             </div>
+
+            <div class="block">
+                <dt>定期便指定</dt>
+                <dd>
+                    {{ $is_scheduled? 'あり' : 'なし' }}
+                </dd>
+                @if($is_scheduled)
+                {{$delivery_span}}
+                @endif
+            </div>
         </div>
 
         <div class="text-right pr15">
