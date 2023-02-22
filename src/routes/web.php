@@ -87,16 +87,6 @@ Route::middleware(['auth'])->group(function () {
 
     // 管理者
     Route::middleware(['role:admin'])->group(function () {
-        // Route::resource('admin/orders', OrderController::class);
-        // Route::prefix('admin/orders')->group(function () {
-        //     Route::get('/', [OrderController::class, 'index'])->name('admin.orders.index');
-        //     Route::get('/create', [OrderController::class, 'create'])->name('admin.orders.create');
-        //     Route::post('/', [OrderController::class, 'store'])->name('admin.orders.store');
-        //     Route::get('/{id}', [OrderController::class, 'show'])->name('admin.orders.show');
-        //     Route::get('/{id}/edit', [OrderController::class, 'edit'])->name('admin.orders.create');
-        //     Route::post('/{id}', [OrderController::class, 'update'])->name('admin.orders.update');
-        //     Route::post('/{id}', [OrderController::class, 'destroy'])->name('admin.orders.destroy');
-        // });
         Route::prefix('admin')->group(function () {
             Route::get('/', [HomeController::class, 'index'])->name('admin.index');
             // 配送業者
