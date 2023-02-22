@@ -6,8 +6,8 @@
     
     <ul class="nav justify-content-end gap-2 bg-light rounded">
       <li class="nav-item"><a href="" class="text-decoration-none text-dark">products</a></li>
-      <li class="nav-item"><a href="{{ route('drivers.index') }}" class="text-decoration-none text-dark">drivers</a></li>
-      <li class="nav-item"><a href="{{ route('orders.index') }}" class="text-decoration-none text-dark">orders</a></li>
+      <li class="nav-item"><a href="{{ route('admin.drivers.index') }}" class="text-decoration-none text-dark">drivers</a></li>
+      <li class="nav-item"><a href="{{ route('admin.orders.index') }}" class="text-decoration-none text-dark">orders</a></li>
       <li class="nav-item"><a href="" class="text-decoration-none text-dark">sales</a></li>
       <li class="nav-item px-4"><a href="" class="text-decoration-none text-dark">users</a></li>
     </ul>
@@ -15,7 +15,7 @@
 
   <!-- 絞り込み機能ここから -->
   <div class="search p-4 bg-light">
-      <form action="{{ route('orders.scope') }}" method="POST" class="my-0">
+      <form action="{{ route('admin.orders.scope') }}" method="POST" class="my-0">
           @csrf
           <div class="container">
             <div class="row">

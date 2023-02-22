@@ -6,8 +6,8 @@
     
     <ul class="nav justify-content-end gap-2 bg-light rounded">
       <li class="nav-item"><a href="" class="text-decoration-none text-dark">products</a></li>
-      <li class="nav-item"><a href="{{ route('drivers.index') }}" class="text-decoration-none text-dark">drivers</a></li>
-      <li class="nav-item"><a href="{{ route('orders.index') }}" class="text-decoration-none text-dark">orders</a></li>
+      <li class="nav-item"><a href="{{ route('admin.drivers.index') }}" class="text-decoration-none text-dark">drivers</a></li>
+      <li class="nav-item"><a href="{{ route('admin.orders.index') }}" class="text-decoration-none text-dark">orders</a></li>
       <li class="nav-item"><a href="" class="text-decoration-none text-dark">sales</a></li>
       <li class="nav-item px-4"><a href="" class="text-decoration-none text-dark">users</a></li>
     </ul>
@@ -29,11 +29,11 @@
         <td>{{$driver->email}}</td>
         <td>
           <button class="btn btn-success">
-            <a href="{{ route('drivers.edit', ['driver'=>$driver->id]) }}" class="text-decoration-none text-light"> {{ __('編集') }} </a>
+            <a href="{{ route('admin.drivers.edit', ['driver'=>$driver->id]) }}" class="text-decoration-none text-light"> {{ __('編集') }} </a>
           </button>
         </td>
         <td>
-          <form method="POST" action="{{route('drivers.destroy',['driver'=>$driver->id])}}" id="delete{{$loop->index}}">
+          <form method="POST" action="{{route('admin.drivers.destroy',['driver'=>$driver->id])}}" id="delete{{$loop->index}}">
             @method('DELETE')
             @csrf
             <button type="submit" form="delete{{$loop->index}}" class="btn btn-danger">削除</button>
@@ -43,6 +43,6 @@
       @endforeach
     </table>
     <button class="btn btn-primary">
-            <a href="{{ route('drivers.create') }}" class="text-decoration-none text-light">{{ __('新規作成') }}</a>
+            <a href="{{ route('admin.drivers.create') }}" class="text-decoration-none text-light">{{ __('新規作成') }}</a>
           </button>
 @endsection
