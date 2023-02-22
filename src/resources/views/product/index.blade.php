@@ -4,7 +4,7 @@
     <div class="product-index">
         <div class="text-center py-3">
             <div>あと<span class="hour" id="hour"></span>時間<span class="minute" id="minute"></span>分<span class="seconds"
-                                                                                                        id="seconds"></span>秒以内に
+                    id="seconds"></span>秒以内に
             </div>
             <div>ご注文いただくと<span id="targetMessage"></span>に届きます！</div>
         </div>
@@ -23,15 +23,10 @@
                     @foreach ($products as $product)
                         <div class="col-md-4">
                             <div class="card mb-4 box-shadow">
-                                <img
-                                        class="card-img-top btn fly"
-                                        src="{{ asset('img/' . $product->thumbnail) }}"
-                                        alt="tomato"
-                                        style="height: 225px; width: 100%; display: block;"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#productModal{{ $product->id }}"
-                                        data-bs-whatever="productTomato"
-                                >
+                                <img class="card-img-top btn fly" src="{{ asset('img/' . $product->thumbnail) }}"
+                                    alt="tomato" style="height: 225px; width: 100%; display: block;"
+                                    data-bs-toggle="modal" data-bs-target="#productModal{{ $product->id }}"
+                                    data-bs-whatever="productTomato">
                                 <div class="card-body">
                                     <p class="card-text">{{ $product->name }}</p>
                                     <div class="text-right">
@@ -41,12 +36,12 @@
                                         <div class="col-sm-5">
                                             <div class="input-group">
                                                 <input type="text" class="form-control quantity"
-                                                       aria-label="Dollar amount (with dot and two decimal places)">
+                                                    aria-label="Dollar amount (with dot and two decimal places)">
                                                 <span class="input-group-text">個</span>
                                             </div>
                                         </div>
                                         <button type="button" class="btn col-sm-5 btn-sm btn-outline-danger"
-                                                onclick="ToCart({{ $product->id }}, {{ $loop->index }});">カートに追加
+                                            onclick="ToCart({{ $product->id }}, {{ $loop->index }});">カートに追加
                                         </button>
                                     </div>
                                 </div>
@@ -60,18 +55,14 @@
 
         <!-- Modal -->
         @foreach ($products as $product)
-
             <div class="modal fade" id="productModal{{ $product->id }}" tabindex="-1" role="dialog"
-                 aria-labelledby="myLargeModalLabel">
+                aria-labelledby="myLargeModalLabel">
                 <!-- //モーダルウィンドウの縦表示位置を調整・画像を大きく見せる -->
                 <div class="modal-dialog modal-lg modal-middle">
                     <div class="modal-content">
                         <div class="modal-body">
-                            <img
-                                    src="{{ asset('img/' . $product->image1) }}"
-                                    alt="tomato"
-                                    style=" width: 100%;"
-                                    class="aligncenter size-full wp-image-425"/>
+                            <img src="{{ asset('img/' . $product->image1) }}" alt="tomato" style=" width: 100%;"
+                                class="aligncenter size-full wp-image-425" />
                         </div>
                         <form>
                             <div class="container-fluid">
@@ -82,77 +73,76 @@
                                 <div class="row mb-2 col-md-4 ms-auto">
                                     <div class="input-group">
                                         <input type="text" class="form-control quantityfromdetail"
-                                               aria-label="Dollar amount (with dot and two decimal places)">
-										<span class="input-group-text">個</span>
+                                            aria-label="Dollar amount (with dot and two decimal places)">
+                                        <span class="input-group-text">個</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-ash" data-bs-dismiss="modal">Close</button>
                                 <button type="button" class="btn btn-danger"
-                                        onclick="ToCartFromDetail({{ $product->id }}, {{ $loop->index }});">カートに追加
+                                    onclick="ToCartFromDetail({{ $product->id }}, {{ $loop->index }});">カートに追加
                                 </button>
                             </div>
                     </div>
                 </div>
             </div>
         @endforeach
+    @endsection
 
-        @endsection
-
-        @push('scripts')
-            <script language="javascript" type="text/javascript">
-                function ToCart(productid, count) {
-                    $(".quantity").each(function (i, elem) {
-                        if (count == i) {
-                            window.location.href = '/cart/' + productid + '/' + $(elem).val();
-                        }
-                    });
-                }
-
-                function ToCartFromDetail(productid, count) {
-                    $(".quantityfromdetail").each(function (i, elem) {
-                        if (count == i) {
-                            window.location.href = '/cart/' + productid + '/' + $(elem).val();
-                        }
-                    });
-                }
-            </script>
-            <script>
-                /*
-                いつまでに注文するといつまでに届くのかを表示する
-                    12:00:00:000 ~ 23:59:59:999 の注文の場合は、明日の午前中
-                    03:00:00:000 ~ 11:59:59:999 の注文の場合は、今日の午後
-                    00:00:00:000 ~ 02:59:59:999 の注文の場合は、今日の午前中
-                */
-                function showCountdown() {
-                    const now = new Date();
-                    const nowHour = now.getHours();
-                    var targetDate, targetMessage;
-
-                    if (12 <= nowHour && nowHour < 24) {
-                        targetDate = (new Date()).setHours(23, 59, 59, 999);
-                        targetMessage = "明日の午前中";
-                    } else if (3 <= nowHour && nowHour < 12) {
-                        targetDate = (new Date()).setHours(11, 59, 59, 999);
-                        targetMessage = "今日の午後";
-                    } else {
-                        targetDate = (new Date()).setHours(2, 59, 59, 999);
-                        targetMessage = "今日の午前中";
+    @push('scripts')
+        <script language="javascript" type="text/javascript">
+            function ToCart(productid, count) {
+                $(".quantity").each(function(i, elem) {
+                    if (count == i) {
+                        window.location.href = '/cart/' + productid + '/' + $(elem).val();
                     }
+                });
+            }
 
-                    remainTime = targetDate - now.getTime();
+            function ToCartFromDetail(productid, count) {
+                $(".quantityfromdetail").each(function(i, elem) {
+                    if (count == i) {
+                        window.location.href = '/cart/' + productid + '/' + $(elem).val();
+                    }
+                });
+            }
+        </script>
+        <script>
+            /*
+                        いつまでに注文するといつまでに届くのかを表示する
+                            12:00:00:000 ~ 23:59:59:999 の注文の場合は、明日の午前中
+                            03:00:00:000 ~ 11:59:59:999 の注文の場合は、今日の午後
+                            00:00:00:000 ~ 02:59:59:999 の注文の場合は、今日の午前中
+                        */
+            function showCountdown() {
+                const now = new Date();
+                const nowHour = now.getHours();
+                var targetDate, targetMessage;
 
-                    const remainHour = Math.floor(remainTime / (1000 * 60 * 60));
-                    const remainMinute = Math.floor((remainTime / (1000 * 60)) - (remainHour * 60));
-                    const remainSeconds = Math.floor(remainTime / 1000) - (remainHour * 60 * 60) - (remainMinute * 60);
-                    document.getElementById("hour").innerHTML = remainHour < 10 ? '0' + remainHour : remainHour;
-                    document.getElementById("minute").innerHTML = remainMinute < 10 ? '0' + remainMinute : remainMinute;
-                    document.getElementById("seconds").innerHTML = remainSeconds < 10 ? '0' + remainSeconds : remainSeconds;
-                    document.getElementById("targetMessage").innerHTML = targetMessage;
-                };
+                if (12 <= nowHour && nowHour < 24) {
+                    targetDate = (new Date()).setHours(23, 59, 59, 999);
+                    targetMessage = "明日の午前中";
+                } else if (3 <= nowHour && nowHour < 12) {
+                    targetDate = (new Date()).setHours(11, 59, 59, 999);
+                    targetMessage = "今日の午後";
+                } else {
+                    targetDate = (new Date()).setHours(2, 59, 59, 999);
+                    targetMessage = "今日の午前中";
+                }
 
-                // 1秒ごとに実行
-                setInterval('showCountdown()', 1000);
-            </script>
+                remainTime = targetDate - now.getTime();
+
+                const remainHour = Math.floor(remainTime / (1000 * 60 * 60));
+                const remainMinute = Math.floor((remainTime / (1000 * 60)) - (remainHour * 60));
+                const remainSeconds = Math.floor(remainTime / 1000) - (remainHour * 60 * 60) - (remainMinute * 60);
+                document.getElementById("hour").innerHTML = remainHour < 10 ? '0' + remainHour : remainHour;
+                document.getElementById("minute").innerHTML = remainMinute < 10 ? '0' + remainMinute : remainMinute;
+                document.getElementById("seconds").innerHTML = remainSeconds < 10 ? '0' + remainSeconds : remainSeconds;
+                document.getElementById("targetMessage").innerHTML = targetMessage;
+            };
+
+            // 1秒ごとに実行
+            setInterval('showCountdown()', 1000);
+        </script>
     @endpush

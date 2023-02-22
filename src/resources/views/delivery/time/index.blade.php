@@ -12,7 +12,7 @@
                 <label for="exampleFormControlSelect1">希望配達時間</label>
                 <select name="delivery_time" class="form-control mb-2" id="exampleFormControlSelect1">
                     @foreach ($time_array as $value => $display)
-                    <option value="{{ $value }}">{{ $display }}</option>
+                        <option value="{{ $value }}">{{ $display }}</option>
                     @endforeach
                 </select>
 
