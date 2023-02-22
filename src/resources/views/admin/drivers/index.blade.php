@@ -15,6 +15,7 @@
         <td>{{$driver->name}}</td>
         <td>{{$driver->company_name}}</td>
         <td>{{$driver->email}}</td>
+        <td><a href="{{ route('drivers.edit', ['driver'=>$driver->id]) }}"> {{ __('編集') }} </a></td>
       </tr>
       @endforeach
     </table>
