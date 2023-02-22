@@ -86,11 +86,9 @@ Route::middleware(['auth'])->group(function () {
     // 管理者
     Route::middleware(['role:admin'])->group(function () {
         Route::prefix('admin')->group(function () {
-            // Route::get('/', [DeliveryListController::class, 'index'])->name('delivery-list');
             Route::get('/', [HomeController::class, 'index'])->name('admin.index');
             // 配送業者
             Route::resource('drivers', DriverController::class);
-            // Route::get('/{id}', [DeliveryListDetailController::class, 'detail'])->name('delivery-list.detail');
         });
     });
 

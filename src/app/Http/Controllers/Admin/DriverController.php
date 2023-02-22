@@ -49,7 +49,6 @@ class DriverController extends Controller
 
         $driver->save();
 
-        //一覧表示画面にリダイレクト
         return redirect('admin/drivers');
     }
 
@@ -95,7 +94,6 @@ class DriverController extends Controller
         //DBに保存
         $driver->save();
 
-        //処理が終わったらdriver/indexにリダイレクト
         return redirect('admin/drivers');
     }
 
@@ -107,6 +105,10 @@ class DriverController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $driver=User::find($id);
+
+        $driver->delete();
+
+        return redirect('admin/drivers');
     }
 }
