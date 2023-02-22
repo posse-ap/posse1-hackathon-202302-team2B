@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\DeliveryStatus;
 use App\Models\Order;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -55,9 +57,10 @@ class OrderController extends Controller
     public function show($order_id)
     {
         $user_id = Auth::id();
-        $order = Order::with('delivery_address', 'order_details', 'order_details.product', 'user')->find($order_id);
-        // dd($order);
-        return view('admin/orders/detail', compact('order'));
+        $order = Order::find($order_id);
+        $drivers = User::where('role_id', Role::getDeliveryAgentId())->get();
+
+        return view('admin.orders.detail', compact('order', 'drivers'));
     }
 
     /**

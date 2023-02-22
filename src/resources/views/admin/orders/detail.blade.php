@@ -23,6 +23,14 @@
                             @endfor
                         </select>
                     </div>
+                    <div class="col-7 order-head">
+                        配送業者:
+                        <select name="driver_id">
+                            @foreach ($drivers as $driver)
+                            <option value="{{$driver->id}}" {{ $order->truck_id == $i ? 'selected' : '' }}>{{$driver->id}}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
                 ■ 配送先住所
                 <div class="row">
