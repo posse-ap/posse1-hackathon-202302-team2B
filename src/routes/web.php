@@ -102,7 +102,9 @@ Route::middleware(['auth'])->group(function () {
             // Route::get('/{id}', [DeliveryListDetailController::class, 'detail'])->name('delivery-list.detail');
 
             // 商品情報
-            Route::get('product', [ProductController::class, 'index'])->name('product.index');
+            Route::get('product', [ProductController::class, 'index'])->name('admin.product.index');
+            Route::get('product/edit/{id}', [ProductController::class, 'edit'])->name('admin.product.edit');
+            Route::post('product/update/{id}', [ProductController::class, 'update'])->name('admin.product.update');
         });
     });
 
