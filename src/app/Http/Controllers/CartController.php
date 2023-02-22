@@ -19,6 +19,7 @@ class CartController extends Controller
                     $key,
                     collect([
                         'quantity'  => $item,
+                        'id' => $product->id,
                         'name'      => $product->name,
                         'thumbnail' => $product->thumbnail,
                         'price'     => $product->price
@@ -26,7 +27,6 @@ class CartController extends Controller
                 );
             });
         }
-
         return view('cart.index', compact('cart_collection'));
     }
 
@@ -66,6 +66,21 @@ class CartController extends Controller
         session(['total_value' => $total_value]);
 
         return redirect()->route('cart');
+    }
+
+    public function delete(Request $request)
+    {
+        $product_id = $request->product_id;
+        $cart = session('cart');
+
+        $cart->pull($product_id);
+
+
+        return redirect()->route('cart')
+        ->with([
+            'flush.message' => 'カートから削除しました。',
+            'flush.alert_type' => 'success',
+        ]);
     }
 
     public function flush()

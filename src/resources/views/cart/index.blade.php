@@ -37,6 +37,7 @@
                     <div class="col-2 text-right">{{ $cart->get('quantity') }}個</div>
                     <div class="col-3 text-right">¥{{ $cart->get('price') }}</div>
                 </div>
+                <a href="{{route('cart.delete', ['product_id' => $cart->get('id')])}}" class="btn btn-danger">削除</a>
 
                 @endforeach
 
