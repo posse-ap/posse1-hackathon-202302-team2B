@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class DriverController extends Controller
 {
@@ -27,7 +28,7 @@ class DriverController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin/drivers/create');
     }
 
     /**
@@ -38,7 +39,18 @@ class DriverController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $driver=new User;
+
+        $driver->name=$request->input('name');
+        $driver->email=$request->input('email');
+        $driver->password=Hash::make($request->password);
+        $driver->company_name=$request->input('company_name');
+        $driver->role_id=$request->input('role_id');
+
+        $driver->save();
+
+        //一覧表示画面にリダイレクト
+        return redirect('admin/drivers');
     }
 
     /**
