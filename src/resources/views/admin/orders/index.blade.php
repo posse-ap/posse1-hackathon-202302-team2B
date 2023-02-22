@@ -1,7 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
-  <h1>一覧表示</h1>
+<nav class="pb-2 border-bottom navbar">
+    <h2>購入一覧</h2>
+    
+    <ul class="nav justify-content-end gap-2 bg-light rounded">
+      <li class="nav-item"><a href="" class="text-decoration-none text-dark">products</a></li>
+      <li class="nav-item"><a href="{{ route('drivers.index') }}" class="text-decoration-none text-dark">drivers</a></li>
+      <li class="nav-item"><a href="{{ route('orders.index') }}" class="text-decoration-none text-dark">orders</a></li>
+      <li class="nav-item"><a href="" class="text-decoration-none text-dark">sales</a></li>
+      <li class="nav-item px-4"><a href="" class="text-decoration-none text-dark">users</a></li>
+    </ul>
+  </nav>
     <table class="table">
       <tr>
         <th>ID</th>
