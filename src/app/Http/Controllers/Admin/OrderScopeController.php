@@ -35,7 +35,7 @@ class OrderScopeController extends Controller
         }
 
         $order_list = $query->with(['user:id,name','delivery_address','delivery_method','delivery_status'])->get();
-        
+
         return view('admin/orders/index', compact('delivery_status_list', 'order_list'));
     }
 
@@ -43,12 +43,18 @@ class OrderScopeController extends Controller
     {
         $order = Order::find($id);
         $truck_id = $request->input('truck_id');
+        $driver_id = $request->input('driver_id');
 
         $order->truck_id = $truck_id;
-        
+        $order->driver_id = $driver_id;
+
         $order->save();
 
         return redirect()
-        ->route('admin.orders.index');
+        ->route('admin.orders.index')
+        ->with([
+            'flush.message' => '配送設定が完了しました。',
+            'flush.alert_type' => 'success',
+        ]);
     }
 }
