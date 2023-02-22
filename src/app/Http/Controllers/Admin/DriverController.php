@@ -17,7 +17,7 @@ class DriverController extends Controller
     {
         $drivers = User::where('role_id',3)->get();
 
-        return view('admin/drivers', compact('drivers'));
+        return view('admin/drivers/index', compact('drivers'));
     }
 
     /**
@@ -60,7 +60,9 @@ class DriverController extends Controller
      */
     public function edit($id)
     {
-        //
+        $driver=User::find($id);
+
+        return view('admin/drivers/edit', compact('driver'));
     }
 
     /**
@@ -72,7 +74,17 @@ class DriverController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $driver=User::find($id);
+
+        $driver->name=$request->input('name');
+        $driver->company_name=$request->input('company_name');
+        $driver->email=$request->input('email');
+
+        //DBに保存
+        $driver->save();
+
+        //処理が終わったらdriver/indexにリダイレクト
+        return redirect('admin/drivers');
     }
 
     /**
