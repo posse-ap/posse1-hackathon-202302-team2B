@@ -35,7 +35,7 @@
     <td>{{$product->discount_rate}}</td>
     <td>{{$product->price}}</td>
     @if($product->is_active === 1)
-    <td>販売中</td> 
+    <td>販売中</td>
     @else
     <td>販売中止</td>
     @endif
@@ -45,11 +45,13 @@
       </button>
     </td>
     <td>
-      <form method="POST" action="#" id="#">
-        @method('DELETE')
-        @csrf
-        <button type="submit" form="#" class="btn btn-danger">削除</button>
-      </form>
+      @method('DELETE')
+      @csrf
+      <button class="btn btn-danger">
+        <a href="{{route('admin.product.destroy', ['id'=>$product->id])}}" class="text-decoration-none text-light">
+          削除
+        </a>
+      </button>
     </td>
   </tr>
   @endforeach
