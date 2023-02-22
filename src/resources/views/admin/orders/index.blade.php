@@ -38,14 +38,13 @@
     <th>¥{{number_format($order->total_price)}}</th>
     <th>{{$order->is_scheduled ? 'はい' : 'いいえ'}}</th>
     <th>{{$order->canceled_at == NULL ? '無し' : '有り'}}</th>
-    @if ($order->delivery_status_id == 4 || $order->delivery_status_id == 5)
+    @if ($order->delivery_status_id == 4)
     <th>
       <form action="{{route('admin.orders.update', ['order' => $order->id])}}" method="POST">
         @method('PATCH')
         @csrf
         <select name="delivery_status_id">
-          <option value="4" {{$order->delivery_status_id == 4 ? 'selected' : ''}}>キャンセル未承認</option>
-          <option value="5" {{$order->delivery_status_id == 5 ? 'selected' : ''}}>キャンセル承認</option>
+          <option value="5">キャンセル承認</option>
         </select>
         <button type="submit" class="btn btn-primary">保存</button>
       </form>
