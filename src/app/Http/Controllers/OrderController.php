@@ -12,6 +12,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Vluzrmos\SlackApi\Facades\SlackChat;
 
 class OrderController extends Controller
 {
@@ -137,6 +138,8 @@ class OrderController extends Controller
         session()->flash('cart');
         session()->flash('total_value');
 
+        SlackChat::message('#random', '新規注文が入りました！');
+
         return view('order.thanks');
     }
 
@@ -149,6 +152,8 @@ class OrderController extends Controller
 
         $order->delivery_status_id = DeliveryStatus::getCancelingId();
         $order->save();
+
+        SlackChat::message('#random', 'キャンセルの依頼を受け付けました');
 
         return redirect()
             ->route('order.detail', [$order])
@@ -174,6 +179,8 @@ class OrderController extends Controller
         $order->delivery_status_id = DeliveryStatus::getReturnRequestingId();
 
         $order->save();
+
+        SlackChat::message('#random', '返品申請の依頼を受け付けました');
 
         return redirect()
             ->route('order.detail', [$order])
