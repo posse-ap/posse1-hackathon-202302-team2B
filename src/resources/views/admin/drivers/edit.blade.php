@@ -3,7 +3,7 @@
 @section('content')
   <h1>編集</h1>
 
-  <form method="POST" action="{{route('drivers.update',['driver' =>$driver->id])}}">
+  <form method="POST" action="{{route('admin.drivers.update',['driver' =>$driver->id])}}">
     @method('PATCH')
     @csrf
     <div class="mb-3">

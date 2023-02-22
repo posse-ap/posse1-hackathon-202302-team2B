@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DeliveryStatus;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class OrderController extends Controller
@@ -51,9 +52,12 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($order_id)
     {
-        //
+        $user_id = Auth::id();
+        $order = Order::with('delivery_address', 'order_details', 'order_details.product', 'user')->find($order_id);
+        // dd($order);
+        return view('admin/orders/detail', compact('order'));
     }
 
     /**

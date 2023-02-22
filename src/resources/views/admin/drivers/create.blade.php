@@ -3,7 +3,7 @@
 @section('content')
   <h1>新規作成</h1>
 
-  <form method="POST" action="{{route('drivers.store')}}">
+  <form method="POST" action="{{route('admin.drivers.store')}}">
     @csrf
     <div class="mb-3">
       <label for="name" class="form-label">name</label>

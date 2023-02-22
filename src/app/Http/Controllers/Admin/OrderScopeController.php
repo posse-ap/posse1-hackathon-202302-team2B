@@ -38,4 +38,17 @@ class OrderScopeController extends Controller
         
         return view('admin/orders/index', compact('delivery_status_list', 'order_list'));
     }
+
+    public function update(Request $request, $id)
+    {
+        $order = Order::find($id);
+        $truck_id = $request->input('truck_id');
+
+        $order->truck_id = $truck_id;
+        
+        $order->save();
+
+        return redirect()
+        ->route('admin.orders.index');
+    }
 }
