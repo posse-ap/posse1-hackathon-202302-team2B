@@ -136,4 +136,29 @@ class OrderController extends Controller
                 'flush.alert_type' => 'success',
             ]);
     }
+
+    public function request_return(Request $request)
+    {
+        $order  = Order::findOrFail($request->input('id'));
+
+        if (!$order->isReturnable()) {
+            return redirect()
+                ->route('order.detail', [$order])
+                ->with([
+                    'flush.message' => 'このご注文は返品期間を過ぎています。',
+                    'flush.alert_type' => 'error',
+                ]);
+        }
+
+        $order->delivery_status_id = DeliveryStatus::getReturnRequestingId();
+
+        $order->save();
+
+        return redirect()
+            ->route('order.detail', [$order])
+            ->with([
+                'flush.message' => '返品申請をしました。',
+                'flush.alert_type' => 'success',
+            ]);
+    }
 }

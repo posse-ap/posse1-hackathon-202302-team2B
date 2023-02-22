@@ -12,6 +12,8 @@ class Order extends Model
 
     const DATE_FORMAT = 'Y/m/d';
 
+    const RETURN_LIMIT = 12;
+
     protected $fillable = [
         'user_id',
         'delivery_address_id',
@@ -62,6 +64,11 @@ class Order extends Model
     public function getFullFormatDeliveryDateAttribute()
     {
         return self::getFullFormatDeliveryDate($this->delivery_date, $this->is_am);
+    }
+
+    public function isReturnable()
+    {
+        return $this->delivery_status_id == DeliveryStatus::getDeliveredId() && Carbon::now()->diffInDays(new Carbon($this->delivery_date)) <= self::RETURN_LIMIT;
     }
 
     public static function getDeliveryDateWhen(Carbon $delivery_date)

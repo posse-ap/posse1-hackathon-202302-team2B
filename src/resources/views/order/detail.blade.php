@@ -93,6 +93,13 @@
                         <button type="submit" class="btn btn-danger">キャンセル予約</button>
                     </form>
                 @endif
+                @if ($order->isReturnable())
+                <form action="{{ route('order.return') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $order->id }}">
+                    <button type="submit" class="btn btn-danger">返品申請</button>
+                </form>
+            @endif
             </div>
         </div>
         <div class="text-right pr15">
