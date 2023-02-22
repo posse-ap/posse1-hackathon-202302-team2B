@@ -18,6 +18,7 @@ use App\Http\Controllers\DeliveryListController;
 use App\Http\Controllers\DeliveryTimeController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\DriverController;
 use Illuminate\Support\Facades\Route;
 
 // 未ログイン
@@ -76,16 +77,18 @@ Route::middleware(['auth'])->group(function () {
         });
     });
 
-    // 配送業者・管理者
+    // 管理者
     Route::middleware(['role:admin'])->group(function () {
         Route::prefix('admin')->group(function () {
             // Route::get('/', [DeliveryListController::class, 'index'])->name('delivery-list');
             Route::get('/', [HomeController::class, 'index'])->name('admin.index');
-            Route::get('/{id}', [DeliveryListDetailController::class, 'detail'])->name('delivery-list.detail');
+            // 配送業者
+            Route::resource('drivers', DriverController::class);
+            // Route::get('/{id}', [DeliveryListDetailController::class, 'detail'])->name('delivery-list.detail');
         });
     });
     
-    // 配送業者・管理者
+    // 配送業者
     Route::middleware(['role:delivery-agent'])->group(function () {
         Route::prefix('delivery-list')->group(function () {
             Route::get('/', [DeliveryListController::class, 'index'])->name('delivery-list');

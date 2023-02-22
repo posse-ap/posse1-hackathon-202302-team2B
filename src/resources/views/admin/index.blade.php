@@ -2,10 +2,10 @@
 
 @section('content')
     <ul class="admin-index">
-        <li><a href=""></a>products</li>
-        <li><a href=""></a>drivers</li>
-        <li><a href=""></a>orders</li>
-        <li><a href=""></a>sales</li>
-        <li><a href=""></a>users</li>
+        <li><a href="">products</a></li>
+        <li><a href="{{ route('drivers.index') }}">drivers</a></li>
+        <li><a href="">orders</a></li>
+        <li><a href="">sales</a></li>
+        <li><a href="">users</a></li>
     </ul>
 @endsection
