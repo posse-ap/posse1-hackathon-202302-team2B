@@ -17,6 +17,7 @@
             </div>
             <button type="submit" class="btn btn-lg btn-green btn-block">Sign in</button>
             <a class="d-block text-green" href="{{  route('register') }}">新規登録の方はこちら</a>
+            <a class="d-block text-green" href="{{  route('password.request') }}">パスワードを忘れた方はこちら</a>
         </form>
     </div>
 @endsection

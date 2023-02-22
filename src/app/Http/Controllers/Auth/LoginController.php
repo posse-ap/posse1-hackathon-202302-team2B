@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 use App\Models\Role;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -48,7 +52,7 @@ class LoginController extends Controller
 
         if ($role_id === Role::getAdminId()) {
             return '/admin';
-        } elseif($role_id === Role::getDeliveryAgentId()) {
+        } elseif ($role_id === Role::getDeliveryAgentId()) {
             return '/delivery-list';
         } else {
             return '/';

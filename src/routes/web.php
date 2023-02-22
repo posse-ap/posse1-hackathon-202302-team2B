@@ -25,7 +25,7 @@ use App\Http\Controllers\ScheduledOrderController;
 use App\Models\Order;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ProductController;
-
+use App\Http\Controllers\Auth\ForgotPasswordController;
 
 // 未ログイン
 Route::middleware([])->group(function () {
@@ -43,9 +43,23 @@ Route::middleware([])->group(function () {
                 Route::post('/', 'login')->name('login.post');
             });
             // ログアウト
+
             Route::get('/logout', 'logout')->name('logout');
         });
     });
+
+    //forgot password
+    Route::get('/forgot-password', function () {
+        return view('auth.forgot-password');
+    })->name('password.request');
+
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'forgotPassword'])->name('password.email');
+
+    Route::get('/reset-password/{token}', function ($token) {
+        return view('auth.reset-password', ['token' => $token]);
+    })->name('password.reset');
+
+    Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
 
     // 製品
     Route::get('/', [ProductsController::class, 'index'])->name('home');
@@ -100,7 +114,7 @@ Route::middleware(['auth'])->group(function () {
             // 購入履歴
             Route::resource('orders', Admin\OrderController::class);
             Route::post('orders/sort', [Admin\OrderScopeController::class, 'scope'])->name('orders.scope');
-            
+
             // 商品情報
             Route::get('product', [ProductController::class, 'index'])->name('product.index');
             Route::get('product/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
