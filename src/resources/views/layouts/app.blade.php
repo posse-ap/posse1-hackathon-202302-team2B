@@ -12,7 +12,7 @@
         @section('header')
             <nav class="navbar sticky-top navbar-expand-sm navbar-green mb-3">
                 <a class="navbar-brand" href="{{ route('home') }}">IchiIchiban</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav4" aria-controls="navbarNav4" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav4" aria-controls="navbarNav4" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"><i class="material-icons icon-white">dehaze</i></span>
                 </button>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav4">

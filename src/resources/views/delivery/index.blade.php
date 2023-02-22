@@ -14,7 +14,7 @@
 
             @foreach($orders as $order)
 
-                <li today_am data-filter-key="20191120AM">
+                <li today_am data-bs-filter-key="20191120AM">
                     {{ $order->getFullFormatDeliveryDateAttribute() }} 配達予定
                     <div class="block">
                         <div class="row position">
@@ -22,9 +22,9 @@
                             <div class="col-7 order-head">
                                 トラック{{ $order->truck_id }}
                                 <i class="material-icons track"
-                                   data-toggle="modal"
-                                   data-target="#trackModal"
-                                   data-whatever="track1">local_shipping</i>
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#trackModal"
+                                   data-bs-whatever="track1">local_shipping</i>
                             </div>
                         </div>
                         ■ 配送先住所
@@ -83,8 +83,8 @@
                             </select>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-ash" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-outline-danger" data-dismiss="modal" id="testttt">
+                            <button type="button" class="btn btn-ash" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-outline-danger" data-bs-dismiss="modal" id="testttt">
                                 決定
                             </button>
                         </div>
