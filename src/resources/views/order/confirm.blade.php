@@ -109,9 +109,6 @@
             <dt>定期便割引率</dt>
             <dd>{{$delivery_span}}</dd>
             @endif
-
-            <dt class="border-top pt-1">合計金額</dt>
-            <dd class="text-right">¥{{ $cart->get('price') }}</dd>
             @endforeach
 
         </div>
