@@ -62,8 +62,6 @@
                                 <option value="1" {{ $order->delivery_status_id == 1 ? 'selected' : '' }}>準備中</option>
                                 <option value="2" {{ $order->delivery_status_id == 2 ? 'selected' : '' }}>配送中</option>
                                 <option value="3" {{ $order->delivery_status_id == 3 ? 'selected' : '' }}>配送済み</option>
-                                <option value="4" {{ $order->delivery_status_id == 4 ? 'selected' : '' }}>キャンセル中
-                                </option>
                                 <option value="5" {{ $order->delivery_status_id == 5 ? 'selected' : '' }}>キャンセル済み
                                 </option>
                                 <option value="6" {{ $order->delivery_status_id == 6 ? 'selected' : '' }}>返品申請中</option>
