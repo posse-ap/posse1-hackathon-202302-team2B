@@ -102,6 +102,7 @@ Route::middleware(['auth'])->group(function () {
         Route::controller(DeliveryController::class)->prefix('delivery-list')->group(function () {
             Route::get('/', 'index')->name('delivery-list');
             // Route::get('/{id}', [DeliveryListDetailController::class, 'detail'])->name('delivery-list.detail');
+            Route::get('/{order_id}', 'detail')->name('delivery.detail');
             Route::post('/{order_id}', 'update')->name('delivery.udpate');
         });
     });
