@@ -15,7 +15,7 @@ class TruckTableSeeder extends Seeder
 	public function run()
 	{
 		$now = date("Y-m-d H:i:s");
-		for ($i = 1; $i <= 5; $i++) {
+		for ($i = 1; $i <= 4; $i++) {
 			Truck::insert([
 				'id'         => $i,
 				'created_at' => $now,
