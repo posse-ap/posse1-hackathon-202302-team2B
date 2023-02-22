@@ -19,8 +19,11 @@ use App\Http\Controllers\DeliveryTimeController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\DriverController;
+use App\Http\Controllers\Driver\DeliveryController;
+// use App\Http\Controllers\Driver\DriverController;
 use App\Http\Controllers\ScheduledOrderController;
 use Illuminate\Support\Facades\Route;
+
 
 // 未ログイン
 Route::middleware([])->group(function () {
@@ -96,9 +99,10 @@ Route::middleware(['auth'])->group(function () {
 
     // 配送業者
     Route::middleware(['role:delivery-agent'])->group(function () {
-        Route::prefix('delivery-list')->group(function () {
-            Route::get('/', [DeliveryListController::class, 'index'])->name('delivery-list');
+        Route::controller(DeliveryController::class)->prefix('delivery-list')->group(function () {
+            Route::get('/', 'index')->name('delivery-list');
             // Route::get('/{id}', [DeliveryListDetailController::class, 'detail'])->name('delivery-list.detail');
+            Route::post('/{order_id}', 'update')->name('delivery.udpate');
         });
     });
 });
