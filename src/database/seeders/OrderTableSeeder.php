@@ -27,7 +27,7 @@ class OrderTableSeeder extends Seeder
 			Order::create([
 				'user_id'             => $user_id,
 				'delivery_address_id' => $delivery_address->id,
-				'delivery_date'       => '2019-12-24',
+				'delivery_date'       => '2023-02-22',
 				'is_am'               => true,
 				'delivery_method_id'  => DeliveryMethod::getPackageDropId(),
 				'delivery_status_id'  => DeliveryStatus::getInPreparationId(),
@@ -37,7 +37,47 @@ class OrderTableSeeder extends Seeder
 			Order::create([
 				'user_id'             => $user_id,
 				'delivery_address_id' => $delivery_address->id,
-				'delivery_date'       => '2019-12-25',
+				'delivery_date'       => '2023-02-23',
+				'is_am'               => false,
+				'delivery_method_id'  => DeliveryMethod::getPackageDropId(),
+				'delivery_status_id'  => DeliveryStatus::getInPreparationId(),
+				'total_price'         => collect([1000, 1500, 2000, 3000, 4000])->random(),
+				'truck_id'            => $truck_id,
+			]);
+			Order::create([
+				'user_id'             => $user_id,
+				'delivery_address_id' => $delivery_address->id,
+				'delivery_date'       => '2023-02-24',
+				'is_am'               => false,
+				'delivery_method_id'  => DeliveryMethod::getPackageDropId(),
+				'delivery_status_id'  => DeliveryStatus::getInPreparationId(),
+				'total_price'         => collect([1000, 1500, 2000, 3000, 4000])->random(),
+				'truck_id'            => $truck_id,
+			]);
+			Order::create([
+				'user_id'             => $user_id,
+				'delivery_address_id' => $delivery_address->id,
+				'delivery_date'       => '2023-02-25',
+				'is_am'               => false,
+				'delivery_method_id'  => DeliveryMethod::getPackageDropId(),
+				'delivery_status_id'  => DeliveryStatus::getInPreparationId(),
+				'total_price'         => collect([1000, 1500, 2000, 3000, 4000])->random(),
+				'truck_id'            => $truck_id,
+			]);
+			Order::create([
+				'user_id'             => $user_id,
+				'delivery_address_id' => $delivery_address->id,
+				'delivery_date'       => '2023-02-26',
+				'is_am'               => false,
+				'delivery_method_id'  => DeliveryMethod::getPackageDropId(),
+				'delivery_status_id'  => DeliveryStatus::getInPreparationId(),
+				'total_price'         => collect([1000, 1500, 2000, 3000, 4000])->random(),
+				'truck_id'            => $truck_id,
+			]);
+			Order::create([
+				'user_id'             => $user_id,
+				'delivery_address_id' => $delivery_address->id,
+				'delivery_date'       => '2023-02-27',
 				'is_am'               => false,
 				'delivery_method_id'  => DeliveryMethod::getPackageDropId(),
 				'delivery_status_id'  => DeliveryStatus::getInPreparationId(),
