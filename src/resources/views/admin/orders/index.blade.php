@@ -8,8 +8,6 @@
       <li class="nav-item"><a href="" class="text-decoration-none text-dark">products</a></li>
       <li class="nav-item"><a href="{{ route('admin.drivers.index') }}" class="text-decoration-none text-dark">drivers</a></li>
       <li class="nav-item"><a href="{{ route('admin.orders.index') }}" class="text-decoration-none text-dark">orders</a></li>
-      <li class="nav-item"><a href="" class="text-decoration-none text-dark">sales</a></li>
-      <li class="nav-item px-4"><a href="" class="text-decoration-none text-dark">users</a></li>
     </ul>
   </nav>
 
@@ -61,36 +59,43 @@
     <th>受け取り方法</th>
     <th>配達ステータス</th>
     <th>金額</th>
+    <th>トラック</th>
     <th>定期便</th>
-    <th>キャンセル有無</th>
+    <th>キャンセル</th>
+    <th>編集</th>
     <th>キャンセル承認</th>
   </tr>
   @foreach($order_list as $order)
-  <tr>
-    <th>{{$order->id}}</th>
-    <th>{{$order->user->name}}</th>
-    <th>{{$order->delivery_address->name}}</th>
-    <th>{{$order->delivery_date}}</th>
-    <th>{{$order->is_am ? '午前' : '午後'}}</th>
-    <th>{{$order->delivery_method->name}}</th>
-    <th>{{$order->delivery_status->name}}</th>
-    <th>¥{{number_format($order->total_price)}}</th>
-    <th>{{$order->is_scheduled ? 'はい' : 'いいえ'}}</th>
-    <th>{{$order->canceled_at == NULL ? '無し' : '有り'}}</th>
-    @if ($order->delivery_status_id == 4)
-    <th>
-      <form action="{{route('admin.orders.update', ['order' => $order->id])}}" method="POST">
-        @method('PATCH')
-        @csrf
-        <select name="delivery_status_id">
-          <option value="5">キャンセル承認</option>
-        </select>
-        <button type="submit" class="btn btn-primary">保存</button>
-      </form>
-    </th>
-    @endif
-    {{-- <td><a href="{{ route('drivers.edit', ['driver'=>$driver->id]) }}"> {{ __('編集') }} </a></td> --}}
-  </tr>
+    <tr>
+      <td>{{$order->id}}</td>
+      <td>{{$order->user->name}}</td>
+      <td>{{$order->delivery_address->name}}</td>
+      <td>{{$order->delivery_date}}</td>
+      <td>{{$order->is_am ? '午前' : '午後'}}</td>
+      <td>{{$order->delivery_method->name}}</td>
+      <td>{{$order->delivery_status->name}}</td>
+      <td>¥{{number_format($order->total_price)}}</td>
+      <td>{{$order->truck_id == NULL ? '未割り当て':$order->truck_id}}</td>
+      <td>{{$order->is_scheduled ? 'はい' : 'いいえ'}}</td>
+      <td>{{$order->canceled_at == NULL ? '無し' : '有り'}}</td>
+      <td>
+        <button class="btn btn-success">
+          <a href="{{ route('admin.orders.show', ['order'=>$order->id]) }}" class="text-decoration-none text-light"> {{ __('編集') }} </a>
+        </button>
+      </td>
+      @if ($order->delivery_status_id == 4)
+      <td>
+        <form action="{{route('admin.orders.update', ['order' => $order->id])}}" method="POST">
+          @method('PATCH')
+          @csrf
+          <select name="delivery_status_id">
+            <option value="5">キャンセル承認</option>
+          </select>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </form>
+      </td>
+      @endif
+    </tr>
   @endforeach
 </table>
 {{-- <a href="{{ route('drivers.create') }}">{{ __('新規作成') }}</a> --}}
