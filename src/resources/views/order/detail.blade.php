@@ -110,6 +110,9 @@
                 @csrf
                 <input type="hidden" name="id" value="{{ $order->id }}">
                 <button type="submit" class="btn btn-danger">キャンセル予約</button>
+                @if($order->is_scheduled)
+                <p>＊次便以降はキャンセルとなりません。</p>
+                @endif
             </form>
             @endif
             @if ($order->isReturnable())
